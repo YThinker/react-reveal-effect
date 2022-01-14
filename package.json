@@ -21,6 +21,7 @@
   "bugs": {
     "url": "https://github.com/YThinker/react-reveal-effect/issues"
   },
+  "types": "dist/types/index.d.ts",
   "homepage": "https://github.com/YThinker/react-reveal-effect#readme",
   "devDependencies": {
     "@types/react": "^17.0.38",
