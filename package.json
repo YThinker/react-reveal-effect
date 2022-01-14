@@ -1,0 +1,35 @@
+{
+  "name": "react-reveal-effect",
+  "version": "0.0.1",
+  "description": " Reveal Effect of Fluent Design for React",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YThinker/react-reveal-effect.git"
+  },
+  "keywords": [
+    "react",
+    "fluent design",
+    "reveal effect"
+  ],
+  "author": "xingkaiyang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YThinker/react-reveal-effect/issues"
+  },
+  "homepage": "https://github.com/YThinker/react-reveal-effect#readme",
+  "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "typescript": "^4.5.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "dependencies": {}
+}
