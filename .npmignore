@@ -1,4 +1,5 @@
 src/
+demo/
 package-lock.json
 tsconfig.json
 .env
