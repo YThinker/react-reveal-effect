@@ -88,6 +88,7 @@
       "last 1 safari version"
     ]
   },
+  "homepage": "/react-reveal-effect/",
   "jest": {
     "roots": [
       "<rootDir>/src"
