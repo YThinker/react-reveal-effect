@@ -82,11 +82,12 @@ export function applyEffect(
       let y = e.pageY - Helpers.getOffset(element).top - window.scrollY
 
       if (initObjectCopy?.options.clickEffect && initObjectCopy?.isPressed) {
-        let cssLightEffect = `radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0)), radial-gradient(circle ${70}px at ${x}px ${y}px, rgba(255,255,255,0), ${lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`
+        let cssLightEffect = `radial-gradient(circle ${70}px at ${x}px ${y}px, rgba(255,255,255,0), ${lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
+        initObjectCopy.options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
 
         Helpers.drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
       }
-      else {
+      else if(initObjectCopy.options.effectBackground){
         Helpers.drawEffect(element, x, y, lightColor, gradientSize)
       }
     }
@@ -116,7 +117,8 @@ export function applyEffect(
       const x = e.pageX - Helpers.getOffset(element).left - window.scrollX
       const y = e.pageY - Helpers.getOffset(element).top - window.scrollY
 
-      const cssLightEffect = `radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0)), radial-gradient(circle ${70}px at ${x}px ${y}px, rgba(255,255,255,0), ${lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`
+      let cssLightEffect = `radial-gradient(circle ${70}px at ${x}px ${y}px, rgba(255,255,255,0), ${lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
+      initObjectCopy.options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
 
       Helpers.drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
     }
@@ -129,7 +131,9 @@ export function applyEffect(
       const x = e.pageX - Helpers.getOffset(element).left - window.scrollX
       const y = e.pageY - Helpers.getOffset(element).top - window.scrollY
 
-      Helpers.drawEffect(element, x, y, lightColor, gradientSize)
+      initObjectCopy.options.effectBackground ?
+      Helpers.drawEffect(element, x, y, lightColor, gradientSize) : 
+      clearEffect(element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
     element.removeMouseListener?.push(() => element.el.removeEventListener("mouseup", handleMouseupEvent))
@@ -153,7 +157,7 @@ export function applyEffect(
   }
 
 
-  if (initObjectCopy.options.effectBackground && initObjectCopy?.children) {
+  if (initObjectCopy?.children) {
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
       const options = initObjectCopy.options;
@@ -161,9 +165,7 @@ export function applyEffect(
       enableBackgroundEffects(element, options.lightColor!, options.lightGradientSize!)
 
       //element click effect
-      if (options.clickEffect) {
-        enableClickEffects(element, options.lightColor!, options.lightGradientSize!)
-      }
+      options.clickEffect && enableClickEffects(element, options.lightColor!, options.lightGradientSize!)
     }
   }
 

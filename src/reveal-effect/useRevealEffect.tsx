@@ -10,7 +10,6 @@ export const useRevealEffect = (
   },
   options?: EffectOptions
 ) => {
-
   const { pageX, pageY } = useContext(MousePosition);
   const globalConfig = useContext(EffectConfig);
   // const [initObject, setInitObject] = useState<InitObject|undefined>();
@@ -19,6 +18,8 @@ export const useRevealEffect = (
     throw new Error("Has No RevealEffectConfig Context");
   }
 
+  const optionsCopy = options || {};
+  const globalConfigCopy = globalConfig || {};
   const draw = useCallback((
     borderSelector?: EffectElement | EffectElements,
     selector?: EffectElement | EffectElements
@@ -29,7 +30,16 @@ export const useRevealEffect = (
     pageX,
     pageY,
     initObject
-  ), [selector?.borderSelector, selector?.elementSelector, globalConfig, options, pageX, pageY, initObject.current])
+  ), [
+    selector?.borderSelector,
+    selector?.elementSelector,
+    pageX, pageY,
+    initObject.current,
+    ...Object.values(globalConfigCopy),
+    ...Object.values(optionsCopy),
+    ...Object.keys(globalConfigCopy),
+    ...Object.keys(optionsCopy)
+  ])
 
 
   let removeDraw: () => void = () => null;

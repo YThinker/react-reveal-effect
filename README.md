@@ -1,9 +1,8 @@
-<p align="center"><img src="https://github.com/YThinker/react-reveal-effect/raw/main/logo.svg" /></p>
+<p align="center"><img src="https://ythinker.github.io/react-reveal-effect/static/media/logo.204f4024266c5c4ed14b824e7cb03c1f.svg" /></p>
 
 <h1 align="center">react-reveal-effect</h1>
 <p align="center">Reveal Effect of Fluent Design for React</p>
 
-&nbsp;
 &nbsp;
 
 ## Features
@@ -12,6 +11,11 @@
 - 📦 Lightweight package
 - 👍 React Hooks & React Components are all supported
 - IE 10 is supported
+
+&nbsp;
+
+## Demo
+🔗 https://ythinker.github.io/react-reveal-effect
 
 &nbsp;
 
@@ -113,11 +117,11 @@ Property
 
 Component Options(extend from global options)
 |Options Property|Description|Type|Default|
-|----|----|----|----|
+|--------|--------|---------|---------|
 |...global options|||
 |borderWidth|border effect line width|string|
 |borderRadius|border effect radius|string|
-|parcel|parcel type<br/>"parcel": might break layout<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative"|"parcel"\|"safe"|"safe"|
+|parcel|parcel type<br/>"parcel": might break layout<br/>"shrink": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative"|"parcel"\|"shrink"\|"safe"|"safe"|
 
 &nbsp;
 
@@ -128,3 +132,10 @@ MIT
 
 > This plugin is extend from [🔗fluent-reveal-effect](https://www.npmjs.com/package/fluent-reveal-effect)\
 > 🙆‍♀️ Thank U
+
+&nbsp;
+
+## Changelog
+### v1.1.0
+Added a new option for RevealEffect component(parcel: "shrink").\
+ClickEffect won't be affected by EffectBackground.

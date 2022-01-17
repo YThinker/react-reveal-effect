@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { RevealEffect, useRevealEffect } from './components/RevealEffect';
 
 import logo from './img/logo.svg';
@@ -39,18 +39,31 @@ const App = () => {
 }
 
 const Main = () => {
+
   return (
     <div className="main">
       <RevealEffect config={{
         parcel: "parcel",
         borderWidth: "1px",
         borderRadius: "16px",
-        clickEffect: true
+        clickEffect: true,
+        effectBackground: false
       }}>
-        <button>Button 1</button>
+        <button className="button">with clickEffect</button>
       </RevealEffect>
-      <button>Button 2</button>
-      <button>Button 3</button>
+      <RevealEffect config={{
+        parcel: "safe",
+        borderWidth: "1px",
+        borderRadius: "16px",
+        clickEffect: false
+      }}>
+        <button className="button">clickEffect disabled</button>
+      </RevealEffect>
+      <RevealEffect config={{
+        parcel: "shrink",
+      }}>
+        <button>Shrink</button>
+      </RevealEffect>
     </div>
   );
 }
