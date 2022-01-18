@@ -1,18 +1,23 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { ConfigComponentProps, EffectConfigProps, PositionProps } from "./types";
+import { ConfigComponentProps, GlobalEffectConfigType, PositionProps } from "./types";
 
 export const MousePosition = createContext<PositionProps>({
   pageX: null,
   pageY: null,
 });
 
-export const EffectConfig = createContext<EffectConfigProps>({
+const globalConfig = {
   borderColor: "rgba(255, 255, 255, 0.6)",
   lightColor: "rgba(255, 255, 255, 0.3)",
+  clickEffectColor: "rgba(255, 255, 255, 0.3)",
   clickEffect: false,
   borderGradientSize: 150,
-  lightGradientSize: 150
-});
+  lightGradientSize: 150,
+  clickEffectGradientSize: 80,
+  effectBackground: true,
+  effectBorder: true,
+}
+export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
 
 export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps>) => {
   const [position, setPosition] = useState<PositionProps>({pageX: 0, pageY: 0});
@@ -27,25 +32,13 @@ export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps
     }
   }, [handleMouseMove])
 
-  const config = props.config;
-  if(config){
-    return (
-      <MousePosition.Provider value={position}>
-        <EffectConfig.Provider value={{...config}}>
-          {props.children}
-        </EffectConfig.Provider>
-      </MousePosition.Provider>
-    );
+  let config = globalConfig;
+  if(props.config){
+    config = {...globalConfig, ...props.config};
   }
   return (
     <MousePosition.Provider value={position}>
-      <EffectConfig.Provider value={{
-        borderColor: "rgba(255, 255, 255, 0.6)",
-        lightColor: "rgba(255, 255, 255, 0.3)",
-        clickEffect: false,
-        borderGradientSize: 150,
-        lightGradientSize: 150
-      }}>
+      <EffectConfig.Provider value={config}>
         {props.children}
       </EffectConfig.Provider>
     </MousePosition.Provider>

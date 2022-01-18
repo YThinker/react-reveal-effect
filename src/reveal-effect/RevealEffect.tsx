@@ -1,28 +1,37 @@
-import { Children, cloneElement, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { Children, cloneElement, forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { RevealEffectProps } from "./types";
 import { useRevealEffect } from "./useRevealEffect";
 
 
-export const RevealEffect = (props: PropsWithChildren<RevealEffectProps>) => {
+export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealEffectProps>>((props, ref) => {
 
-  const { children } = props;
-  const { borderRadius, borderWidth = "1px", parcel, ...options } = props.config;
+  const { 
+    children,
+    style, className,
+    borderStyle, borderClassName,
+    borderRef
+  } = props;
+  const { borderRadius, borderWidth = "1px", parcel, ...options } = props.config || {};
+
+  // only need one child
   if(!children || Children.count(children) !== 1){
     throw new Error("Must and only needs one child");
   }
   const child = Children.only(children)
 
-  const borderRef = useRef(null);
-  const elementRef = useRef(null);
+  // dom ref and styles
+  const insiderBorderRef = useRef<HTMLDivElement|null>(null);
+  const insiderElementRef = useRef(null);
+  const safeContainerRef = useRef(null);
   const [shrinkStyles, setShrinkStyles] = useState({
     border: {},
     element: {}
   });
+
+  // calc styles of shrink
   useEffect(() => {
-    console.log(elementRef.current);
-    if(parcel === "shrink" && elementRef.current) {
-      const styles = window.getComputedStyle(elementRef.current);
-      console.log(styles);
+    if(parcel === "shrink" && insiderElementRef.current) {
+      const styles = window.getComputedStyle(insiderElementRef.current);
       setShrinkStyles({
         border: {
           display: "inline-block",
@@ -40,46 +49,66 @@ export const RevealEffect = (props: PropsWithChildren<RevealEffectProps>) => {
       })
     }
   }, [])
+  // use reveal effect
   useRevealEffect({
-    borderSelector: borderRef.current,
-    elementSelector: elementRef.current
+    borderSelector: insiderBorderRef.current,
+    elementSelector: insiderElementRef.current
   }, options);
+
+  // forward and expose dom ref
+  // expose container ref
+  useImperativeHandle<HTMLDivElement|null, HTMLDivElement|null>(ref, () => {
+    if(parcel === "safe"){
+      return safeContainerRef.current;
+    }
+    return insiderBorderRef.current;
+  }, [insiderBorderRef.current, safeContainerRef.current])
+  // expose border ref
+  useImperativeHandle<HTMLDivElement|null, HTMLDivElement|null>(
+    borderRef,
+    () => insiderBorderRef.current,
+    [insiderBorderRef.current]
+  )
 
   if(parcel === "parcel"){
     return (
-      <div ref={borderRef} style={{display: "inline-block", borderRadius, padding: borderWidth }}>
+      <div ref={insiderBorderRef} style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }} className={className}>
         {cloneElement(
           child,
-          {style: {borderRadius: borderRadius}, ref: elementRef},
+          {style: {borderRadius: borderRadius}, ref: insiderElementRef},
         )}
       </div>
     );
   } else if(parcel === "shrink"){
     return (
-      <div ref={borderRef} style={shrinkStyles.border}>
+      <div ref={insiderBorderRef} style={{ ...shrinkStyles.border, ...style}} className={className}>
         {cloneElement(
           child,
-          {style: shrinkStyles.element, ref: elementRef},
+          {style: shrinkStyles.element, ref: insiderElementRef},
         )}
       </div>
     );
   } else {
     return (
-      <div style={{display: "inline-block", position: "relative"}}>
-        <div ref={borderRef} style={{
-          position: "absolute",
-          width: `calc(100% + ${borderWidth} + ${borderWidth})`,
-          height: `calc(100% + ${borderWidth} + ${borderWidth})`,
-          top: `-${borderWidth}`,
-          left: `-${borderWidth}`,
-          borderRadius,
-          zIndex: 1
-        }}></div>
+      <div ref={safeContainerRef} style={{display: "inline-block", position: "relative", ...style}} className={className}>
+        <div ref={insiderBorderRef}
+          style={{
+            position: "absolute",
+            width: `calc(100% + ${borderWidth} + ${borderWidth})`,
+            height: `calc(100% + ${borderWidth} + ${borderWidth})`,
+            top: `-${borderWidth}`,
+            left: `-${borderWidth}`,
+            borderRadius,
+            zIndex: 1,
+            ...borderStyle
+          }}
+          className={borderClassName}
+        ></div>
         {cloneElement(
           child,
-          {style: {borderRadius: borderRadius, position: "relative", zIndex: 1}, ref: elementRef},
+          {style: {borderRadius: borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
         )}
       </div>
     );
   }
-}
+})

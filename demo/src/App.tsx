@@ -39,30 +39,18 @@ const App = () => {
 }
 
 const Main = () => {
+  const [config, setConfig] = useState({
+    clickEffect: false,
+  })
 
   return (
     <div className="main">
-      <RevealEffect config={{
-        parcel: "parcel",
-        borderWidth: "1px",
-        borderRadius: "16px",
-        clickEffect: true,
-        effectBackground: false
-      }}>
+      <label>
+        <input type="checkbox" name="" id="" />
+        Enable ClickEffect
+      </label>
+      <RevealEffect config={config}>
         <button className="button">with clickEffect</button>
-      </RevealEffect>
-      <RevealEffect config={{
-        parcel: "safe",
-        borderWidth: "1px",
-        borderRadius: "16px",
-        clickEffect: false
-      }}>
-        <button className="button">clickEffect disabled</button>
-      </RevealEffect>
-      <RevealEffect config={{
-        parcel: "shrink",
-      }}>
-        <button>Shrink</button>
       </RevealEffect>
     </div>
   );

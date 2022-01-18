@@ -1,25 +1,24 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { applyEffect } from "./applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
-import { EffectElement, EffectElements, EffectOptions, InitObject } from "./types";
+import { EffectElement, EffectElements, EffectOptionsType, InitObjectType } from "./types";
 
 export const useRevealEffect = (
   selector: {
     borderSelector?: EffectElement | EffectElements | null,
     elementSelector?: EffectElement | EffectElements | null,
   },
-  options?: EffectOptions
+  options?: EffectOptionsType
 ) => {
   const { pageX, pageY } = useContext(MousePosition);
   const globalConfig = useContext(EffectConfig);
-  // const [initObject, setInitObject] = useState<InitObject|undefined>();
-  const initObject = useRef<InitObject | undefined>();
+
+  const initObject = useRef<InitObjectType | undefined>();
+  
   if(typeof pageX !== "number" || typeof pageY !== "number"){
     throw new Error("Has No RevealEffectConfig Context");
   }
 
-  const optionsCopy = options || {};
-  const globalConfigCopy = globalConfig || {};
   const draw = useCallback((
     borderSelector?: EffectElement | EffectElements,
     selector?: EffectElement | EffectElements
@@ -35,10 +34,7 @@ export const useRevealEffect = (
     selector?.elementSelector,
     pageX, pageY,
     initObject.current,
-    ...Object.values(globalConfigCopy),
-    ...Object.values(optionsCopy),
-    ...Object.keys(globalConfigCopy),
-    ...Object.keys(optionsCopy)
+    options, globalConfig
   ])
 
 
