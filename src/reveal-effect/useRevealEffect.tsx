@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { applyEffect } from "./applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
 import { EffectElement, EffectElements, EffectOptionsType, InitObjectType } from "./types";
@@ -14,7 +14,7 @@ export const useRevealEffect = (
   const globalConfig = useContext(EffectConfig);
 
   const initObject = useRef<InitObjectType | undefined>();
-  
+
   if(typeof pageX !== "number" || typeof pageY !== "number"){
     throw new Error("Has No RevealEffectConfig Context");
   }
@@ -25,20 +25,18 @@ export const useRevealEffect = (
   ) => applyEffect(
     borderSelector,
     selector,
-    Object.assign(globalConfig, options),
+    Object.assign({}, globalConfig, options),
     pageX,
     pageY,
     initObject
   ), [
-    selector?.borderSelector,
-    selector?.elementSelector,
     pageX, pageY,
-    initObject.current,
+    initObject,
     options, globalConfig
   ])
 
 
-  let removeDraw: () => void = () => null;
+  const removeDraw = useRef(() => {});
   useEffect(() => {
     let borderSelector = selector?.borderSelector;
     let elementSelector = selector?.elementSelector;
@@ -49,9 +47,9 @@ export const useRevealEffect = (
       elementSelector = undefined;
     }
     if (borderSelector || elementSelector) {
-      removeDraw = draw(borderSelector!, elementSelector!)
+      removeDraw.current = draw(borderSelector!, elementSelector!)
     }
   }, [selector?.borderSelector, selector?.elementSelector, draw])
-  useEffect(() => () => removeDraw(), []);
+  useEffect(() => () => removeDraw.current(), []);
   return removeDraw;
 }

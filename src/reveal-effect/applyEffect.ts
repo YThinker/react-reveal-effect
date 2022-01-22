@@ -50,10 +50,27 @@ export function applyEffect(
   }
 
   initObject.current = init();
+  /**
+   * @description To get the newest options
+   */
   initObject.current.options = assignOptions();
 
   const initObjectCopy = initObject.current;
 
+  /**
+   * @description clear effect when options have been changed
+   */
+  if(!initObjectCopy.options.clickEffect){
+    initObjectCopy.children?.forEach(item => {
+      item.removeMouseListener.mousedown && item.removeMouseListener.mousedown();
+      item.removeMouseListener.mousedown = null;
+      item.removeMouseListener.mouseup && item.removeMouseListener.mouseup();
+      item.removeMouseListener.mouseup = null;
+    });
+  }
+  if(!initObjectCopy.options.effectBorder){
+    removeChildrenBorderEventListener();
+  }
 
   function clearEffect(element: PreProcessElement) {
     initObjectCopy.isPressed = false
@@ -69,7 +86,7 @@ export function applyEffect(
     gradientSize: number,
   ) {
 
-    if (element.removeMouseListener?.length && element.removeMouseListener?.length >= 2) {
+    if (element.removeMouseListener.mousemove || element.removeMouseListener.mouseleave) {
       return;
     }
     //element background effect --------------------
@@ -88,14 +105,14 @@ export function applyEffect(
         Helpers.drawEffect(element, x, y, lightColor, gradientSize)
       }
     }
-    element.el.addEventListener("mousemove", handleMousemoveEvent)
-    element.removeMouseListener = [() => element.el.removeEventListener("mousemove", handleMousemoveEvent)]
+    element.el.addEventListener("mousemove", handleMousemoveEvent);
+    element.removeMouseListener.mousemove = () => element.el.removeEventListener("mousemove", handleMousemoveEvent);
 
     const handleMouseleaveEvent = () => {
       clearEffect(element)
     }
     element.el.addEventListener("mouseleave", handleMouseleaveEvent)
-    element.removeMouseListener.push(() => element.el.removeEventListener("mouseleave", handleMouseleaveEvent))
+    element.removeMouseListener.mouseleave = () => element.el.removeEventListener("mouseleave", handleMouseleaveEvent);
   }
 
 
@@ -108,7 +125,7 @@ export function applyEffect(
     gradientSize: number,
   ) {
 
-    if (element.removeMouseListener?.length && element.removeMouseListener?.length > 2) {
+    if (element.removeMouseListener.mousedown || element.removeMouseListener.mouseup) {
       return;
     }
     const handleMousedownEvent = (e: MouseEvent) => {
@@ -122,7 +139,7 @@ export function applyEffect(
       Helpers.drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
     }
     element.el.addEventListener("mousedown", handleMousedownEvent)
-    element.removeMouseListener?.push(() => element.el.removeEventListener("mousedown", handleMousedownEvent))
+    element.removeMouseListener.mousedown = () => element.el.removeEventListener("mousedown", handleMousedownEvent);
 
 
     const handleMouseupEvent = (e: MouseEvent) => {
@@ -135,7 +152,7 @@ export function applyEffect(
       clearEffect(element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
-    element.removeMouseListener?.push(() => element.el.removeEventListener("mouseup", handleMouseupEvent))
+    element.removeMouseListener.mouseup = () => element.el.removeEventListener("mouseup", handleMouseupEvent);
   }
 
   if (initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
@@ -155,7 +172,6 @@ export function applyEffect(
     }
   }
 
-
   if (initObjectCopy?.children) {
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
@@ -169,20 +185,40 @@ export function applyEffect(
   }
 
 
-  return function removeEffect() {
-    const clearEl = (item: PreProcessElement) => {
-      clearEffect(item);
-      item.removeMouseListener?.forEach(removeHandler => removeHandler())
-      item.removeMouseListener = null;
+  function clearEl(item: PreProcessElement) {
+    clearEffect(item);
+    let key: keyof typeof item.removeMouseListener
+    for(key in item.removeMouseListener){
+      if(item.removeMouseListener[key]){
+        (item.removeMouseListener[key] as () => void)();
+        item.removeMouseListener[key] = null;
+      }
     }
-
-    initObject.current?.childrenBorder?.forEach(item => {
-      clearEl(item);
-    });
+  }
+  function removeChildrenEventListener() {
     initObject.current?.children?.forEach(item => {
       clearEl(item);
     })
-
+  }
+  function removeChildrenBorderEventListener() {
+    initObject.current?.childrenBorder?.forEach(item => {
+      clearEl(item);
+    });
+  }
+  function clearAllBackgroundEffect() {
+    initObject.current?.children?.forEach(item => clearEffect(item));
+  }
+  function clearAllBorderEffect() {
+    initObject.current?.childrenBorder?.forEach(item => clearEffect(item));
+  }
+  /**
+   * @description Clear Effect
+   */
+  return function removeEffect() {
+    removeChildrenEventListener();
+    removeChildrenBorderEventListener();
+    clearAllBorderEffect();
+    clearAllBackgroundEffect();
     initObject.current = undefined;
   }
 }

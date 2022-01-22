@@ -219,6 +219,8 @@ const Home = () => {
 &nbsp;
 
 ## Changelog
+### v1.2.1
+Fixed some problem of renderer when options have been changed
 ### v1.2.0
 Added some new options for effect options. (clickEffectGradientSize, clickEffectColor)\
 Added some new property for RevealEffect component. (style, borderStyle, className, borderClassName, ref, borderRef)\

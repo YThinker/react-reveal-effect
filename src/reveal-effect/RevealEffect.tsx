@@ -29,26 +29,27 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
   });
 
   // calc styles of shrink
+  const styles = useRef<CSSStyleDeclaration|undefined>();
   useEffect(() => {
     if(parcel === "shrink" && insiderElementRef.current) {
-      const styles = window.getComputedStyle(insiderElementRef.current);
+      styles.current ?? (styles.current = window.getComputedStyle(insiderElementRef.current));
       setShrinkStyles({
         border: {
           display: "inline-block",
           borderRadius,
           padding: borderWidth,
-          width: styles.width,
-          height: styles.height,
+          width: styles.current.width,
+          height: styles.current.height,
           boxSizing: "border-box"
         },
         element: {
           borderRadius: borderRadius,
-          width: `calc(${styles.width} - ${borderWidth} - ${borderWidth})`,
-          height: `calc(${styles.height} - ${borderWidth} - ${borderWidth})`
+          width: `calc(${styles.current.width} - ${borderWidth} - ${borderWidth})`,
+          height: `calc(${styles.current.height} - ${borderWidth} - ${borderWidth})`
         }
       })
     }
-  }, [])
+  }, [borderWidth, borderRadius, parcel])
   // use reveal effect
   useRevealEffect({
     borderSelector: insiderBorderRef.current,
@@ -62,12 +63,12 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
       return safeContainerRef.current;
     }
     return insiderBorderRef.current;
-  }, [insiderBorderRef.current, safeContainerRef.current])
+  }, [parcel])
   // expose border ref
   useImperativeHandle<HTMLDivElement|null, HTMLDivElement|null>(
     borderRef,
     () => insiderBorderRef.current,
-    [insiderBorderRef.current]
+    [insiderBorderRef]
   )
 
   if(parcel === "parcel"){
