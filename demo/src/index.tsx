@@ -1,6 +1,9 @@
 import { StrictMode } from 'react';
 import { render } from 'react-dom';
 import './index.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 import { RevealEffectConfig } from './components/RevealEffect';
 import App from './App';

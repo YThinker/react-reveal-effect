@@ -38,7 +38,13 @@ export type EffectElements = EffectElement[];
 export interface PreProcessElement {
   oriBg: CSSStyleDeclaration["backgroundImage"],
   el: HTMLElement,
-  removeMouseListener: Array<() => void> | null
+  removeMouseListener: RemoveMouseListener
+}
+export interface RemoveMouseListener {
+  mousedown: (() => void) | null;
+  mouseup: (() => void) | null;
+  mousemove: (() => void) | null;
+  mouseleave: (() => void) | null;
 }
 
 export type PreProcessElements = Array<PreProcessElement>;

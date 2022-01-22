@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { ConfigComponentProps, GlobalEffectConfigType, PositionProps } from "./types";
 
 export const MousePosition = createContext<PositionProps>({
@@ -22,9 +22,9 @@ export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
 export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps>) => {
   const [position, setPosition] = useState<PositionProps>({pageX: 0, pageY: 0});
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     setPosition(pre => ({...pre, pageX: e.pageX, pageY: e.pageY}))
-  }
+  }, [])
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     return () => {

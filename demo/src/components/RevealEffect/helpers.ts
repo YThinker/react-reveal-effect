@@ -33,7 +33,12 @@ export function preProcessElements(elements: HTMLElement[]) {
 		res.push({
 			oriBg: getComputedStyle(el)["backgroundImage"],
 			el: el,
-      removeMouseListener: null
+      removeMouseListener: {
+				mousedown: null,
+				mouseup: null,
+				mousemove: null,
+				mouseleave: null
+			}
 		});
 	});
 
