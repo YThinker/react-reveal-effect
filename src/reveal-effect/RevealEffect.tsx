@@ -11,7 +11,9 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
     borderStyle, borderClassName,
     borderRef
   } = props;
-  const { borderRadius, borderWidth = "1px", parcel, ...options } = props.config || {};
+  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = props.config || {};
+  const borderRadius = typeof radius === "number" ? `${radius}px` : radius;
+  const borderWidth = typeof width === "number" ? `${width}px` : width;
 
   // only need one child
   if(!children || Children.count(children) !== 1){
@@ -32,7 +34,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
   const styles = useRef<CSSStyleDeclaration|undefined>();
   useEffect(() => {
     if(parcel === "shrink" && insiderElementRef.current) {
-      styles.current ?? (styles.current = window.getComputedStyle(insiderElementRef.current));
+      styles.current ?? (styles.current = {...window.getComputedStyle(insiderElementRef.current)});
       setShrinkStyles({
         border: {
           display: "inline-block",
@@ -43,7 +45,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
           boxSizing: "border-box"
         },
         element: {
-          borderRadius: borderRadius,
+          borderRadius,
           width: `calc(${styles.current.width} - ${borderWidth} - ${borderWidth})`,
           height: `calc(${styles.current.height} - ${borderWidth} - ${borderWidth})`
         }
@@ -76,7 +78,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
       <div ref={insiderBorderRef} style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }} className={className}>
         {cloneElement(
           child,
-          {style: {borderRadius: borderRadius}, ref: insiderElementRef},
+          {style: {borderRadius}, ref: insiderElementRef},
         )}
       </div>
     );
@@ -107,7 +109,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
         ></div>
         {cloneElement(
           child,
-          {style: {borderRadius: borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
+          {style: {borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
         )}
       </div>
     );

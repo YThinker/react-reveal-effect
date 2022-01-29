@@ -35,7 +35,7 @@ Parent.ts
 ```tsx
 import { RevealEffectConfig } from 'react-reveal-effect';
 
-const Father = () => {
+const Parent = () => {
   return (
     <RevealEffectConfig
       config={...global options}
@@ -117,8 +117,8 @@ Component Options(extend from EffectOptionsType)
 | Options Property  | Description                                                                                                                                                                                                                                                                     | Type                               | Default |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------- |
 | ...global options |                                                                                                                                                                                                                                                                                 | EffectOptionsType                  |
-| borderWidth       | border effect line width                                                                                                                                                                                                                                                        | string                             |
-| borderRadius      | border effect radius                                                                                                                                                                                                                                                            | string                             |
+| borderWidth       | border effect line width                                                                                                                                                                                                                                                        | string \| number                             |
+| borderRadius      | border effect radius                                                                                                                                                                                                                                                            | string \| number                             |
 | style             | container style                                                                                                                                                                                                                                                                 | string                             |
 | borderStyle       | border element style                                                                                                                                                                                                                                                            | string                             |
 | className         | container className                                                                                                                                                                                                                                                             | string                             |
@@ -219,6 +219,8 @@ const Home = () => {
 &nbsp;
 
 ## Changelog
+### v1.2.2
+Update Reveal Effect component's options: borderWidth & borderRadius support number type
 ### v1.2.1
 Fixed some problem of renderer when options have been changed
 ### v1.2.0

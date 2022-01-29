@@ -1,6 +1,6 @@
 {
   "name": "react-reveal-effect",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": " Reveal Effect of Fluent Design for React",
   "main": "dist/index.js",
   "scripts": {
@@ -33,8 +33,5 @@
     "react-dom": ">=16.8.0",
     "react-app-polyfill": "^2.0.0"
   },
-  "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0"
-  }
+  "dependencies": {}
 }
