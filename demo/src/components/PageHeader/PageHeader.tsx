@@ -11,7 +11,7 @@ const PageHeader = () => {
 
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
   useRevealEffect(
-    {borderSelector: logoContainerRef.current},
+    {borderSelector: logoContainerRef},
     {borderGradientSize: 200}
   );
 

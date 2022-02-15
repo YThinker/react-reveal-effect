@@ -54,8 +54,8 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
   }, [borderWidth, borderRadius, parcel])
   // use reveal effect
   useRevealEffect({
-    borderSelector: insiderBorderRef.current,
-    elementSelector: insiderElementRef.current
+    borderSelector: insiderBorderRef,
+    elementSelector: insiderElementRef
   }, options);
 
   // forward and expose dom ref

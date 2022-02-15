@@ -11,6 +11,7 @@ const App = () => (
     <PageHeader />
     <Hr />
     <AdjustableDemo />
+    <Hr />
   </ThemeProvider>
 );
 

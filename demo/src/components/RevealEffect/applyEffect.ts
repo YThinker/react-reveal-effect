@@ -4,8 +4,8 @@ import * as Helpers from "./helpers";
 import { EffectElement, EffectElements, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "./types";
 
 export function applyEffect(
-  borderSelector: EffectElement | EffectElements | undefined,
   selector: EffectElement | EffectElements | undefined,
+  isContainer: boolean,
   options: GlobalEffectConfigType,
   pageX: number,
   pageY: number,
@@ -16,15 +16,15 @@ export function applyEffect(
     return Object.assign({}, options);
   }
   function init() {
-
+    
     if (initObject.current) {
       return initObject.current;
     }
-
+    console.log(selector);
     return {
       options: assignOptions(),
-      childrenBorder: borderSelector ? getPreProcessElements(borderSelector) : undefined,
-      children: selector ? getPreProcessElements(selector) : undefined,
+      childrenBorder: isContainer && selector ? getPreProcessElements(selector) : undefined,
+      children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
       isPressed: false
     };
   }
@@ -155,7 +155,7 @@ export function applyEffect(
     element.removeMouseListener.mouseup = () => element.el.removeEventListener("mouseup", handleMouseupEvent);
   }
 
-  if (initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
+  if (isContainer && initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
     for (let i = 0; i < initObjectCopy.childrenBorder.length; i++) {
       const element = initObjectCopy.childrenBorder[i];
       const options = initObjectCopy.options;
@@ -172,7 +172,7 @@ export function applyEffect(
     }
   }
 
-  if (initObjectCopy?.children) {
+  if (!isContainer && initObjectCopy?.children) {
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
       const options = initObjectCopy.options;

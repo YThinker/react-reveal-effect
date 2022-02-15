@@ -32,8 +32,10 @@ export interface ConfigComponentProps {
   config?: EffectOptionsType
 }
 
-export type EffectElement = HTMLElement | (() => HTMLElement) | Element;
+export type EffectElement = HTMLElement | (() => HTMLElement) | Element | null;
+export type EffectElementRef = MutableRefObject<EffectElement>;
 export type EffectElements = EffectElement[];
+export type EffectElementRefs = Array<MutableRefObject<EffectElement>>;
 
 export interface PreProcessElement {
   oriBg: CSSStyleDeclaration["backgroundImage"],

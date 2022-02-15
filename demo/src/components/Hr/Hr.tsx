@@ -5,7 +5,7 @@ import "./Hr.css";
 const Hr = () => {
   const hrRef = useRef<HTMLHRElement|null>(null);
   useRevealEffect(
-    {borderSelector: hrRef.current},
+    {borderSelector: hrRef},
     {borderGradientSize: 200}
   );
 
