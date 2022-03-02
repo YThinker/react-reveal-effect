@@ -1,6 +1,6 @@
 import { Box, Grid, List, ListItem, ListItemText, Slider, Switch } from "@mui/material";
 import { ChangeEvent, useMemo, useState } from "react";
-import { RevealEffect } from "../RevealEffect";
+import { RevealEffect } from "../../../../RevealEffect";
 
 const AdjustableDemo = () => {
   const [config, setConfig] = useState({
@@ -79,7 +79,7 @@ const AdjustableDemo = () => {
               max={30} valueLabelDisplay="auto"
               value={config.borderRadius} onChange={(_, newValue) => handleSliderChange("borderRadius", newValue)}
             />
-          </ListItem>  
+          </ListItem>
         </RevealEffect>
         <RevealEffect config={listItemEffectConfig}>
           <ListItem sx={{ backgroundColor: "#282c34" }}>
@@ -103,7 +103,6 @@ const AdjustableDemo = () => {
               color: "#fff",
               backgroundColor: "#282c34",
             }}
-            onClick={() => setConfig(pre => ({...pre, effectBackground: false}))}
           >Demo</Box>
         </RevealEffect>
       </Grid>

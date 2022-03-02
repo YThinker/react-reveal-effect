@@ -1,9 +1,14 @@
-import { CSSProperties, MutableRefObject, ReactElement } from "react";
+import { CSSProperties, ElementType, MutableRefObject, ReactElement } from "react";
+
+export interface OptionsObject {
+  [key: string]: any;
+}
 
 export interface PositionProps {
   pageX: number|null,
   pageY: number|null,
 }
+
 
 export interface GlobalEffectConfigType {
   borderColor: string,
@@ -29,13 +34,16 @@ export interface EffectOptionsType {
 }
 
 export interface ConfigComponentProps {
-  config?: EffectOptionsType
+  mountOnBody?: boolean;
+  component?: ElementType;
+  config?: EffectOptionsType;
+  [key: string]: any;
 }
 
 export type EffectElement = HTMLElement | (() => HTMLElement) | Element | null;
-export type EffectElementRef = MutableRefObject<EffectElement>;
+export type EffectElementRef = MutableRefObject<HTMLElement|null>;
 export type EffectElements = EffectElement[];
-export type EffectElementRefs = Array<MutableRefObject<EffectElement>>;
+export type EffectElementRefs = Array<MutableRefObject<HTMLElement|null>>;
 
 export interface PreProcessElement {
   oriBg: CSSStyleDeclaration["backgroundImage"],
@@ -73,6 +81,7 @@ export interface RevealEffectStylesType extends EffectOptionsType {
 }
 
 export interface RevealEffectProps  {
+  component?: ElementType;
   config?: RevealEffectStylesType;
   children: ReactElement<HTMLElement>;
 
@@ -100,4 +109,19 @@ export interface RevealEffectProps  {
    * @description border ref
    */
   borderRef?: MutableRefObject<HTMLDivElement | null>;
+
+  [key: string]: any;
 }
+
+export interface ApplyEffectInfoType {
+  borderIsIntersected: boolean[] | undefined;
+  elementIsIntersected: boolean[] | undefined;
+  removeEffect: () => void;
+}
+export type ApplyEffectType = (
+  selector: HTMLElement | Array<HTMLElement>,
+  isContainer: boolean,
+  options: GlobalEffectConfigType,
+  pageX: number, pageY: number,
+  initObject: MutableRefObject<InitObjectType | undefined>
+) => ApplyEffectInfoType

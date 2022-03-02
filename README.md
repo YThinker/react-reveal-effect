@@ -38,7 +38,10 @@ import { RevealEffectConfig } from 'react-reveal-effect';
 const Parent = () => {
   return (
     <RevealEffectConfig
-      config={...global options}
+      mountOnBody={true}
+      config={{
+        borderColose: "#fff"
+      }}
     >
       ...
     </RevealEffectConfig>
@@ -56,10 +59,12 @@ const Child = () => {
   const buttonRef = useRef(null);
   const removeEffect = useRevealEffect(
     {
-      borderSelector: containerRef.current,
-      elementSelector: buttonRef.current
+      borderSelector: containerRef,
+      elementSelector: buttonRef
     },
-    {...custom options}
+    {
+      clickEffect: false
+    }
   );
 
   return (
@@ -77,8 +82,10 @@ import { RevealEffect } from "react-reveal-effect";
 const Child = () => {
 
   return (
-    <RevealEffect config={...custom options}>
-      <button></button>
+    <RevealEffect component="span" config={{
+      effectBorder: false
+    }}>
+      <button>Demo</button>
     </RevealEffect>
   )
 }
@@ -103,15 +110,16 @@ const Child = () => {
 Parameter
 | Params   | Description                 | Type                                                                                                                              |
 | -------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| selector | draw effect on the selector | {<br/>&nbsp;&nbsp;borderSelector?: HTMLElement\|HTMLElement[], <br/>&nbsp;&nbsp;elementSelector: HTMLElement\|HTMLElement[]<br/>} |
+| selectors | draw effect on the selector | {<br/>&nbsp;&nbsp;borderSelector?: MutableRefObject\<HTMLElement\>\|HTMLElement\|HTMLElement[], <br/>&nbsp;&nbsp;elementSelector: HTMLElement\|HTMLElement[]<br/>} |
 | options  | effect options              | EffectOptionsType                                                                                                                 |
 
 
 ### Component
 Property
-| Props  | Description    | Type              |
-| ------ | -------------- | ----------------- |
-| config | effect options | EffectOptionsType |
+| Props  | Description    | Type              | default |
+| ------ | -------------- | ----------------- |---------|
+| config | effect options | ComponentOptions |
+| component | The component used for the root node | elementType | div |
 
 Component Options(extend from EffectOptionsType)
 | Options Property  | Description                                                                                                                                                                                                                                                                     | Type                               | Default |
@@ -139,79 +147,6 @@ MIT
 &nbsp;
 
 ## Q&A
-### How to use hooks when selector is an array
-Case 1
-```tsx
-const App = () => {
-
-  const logoContainerRef = useRef<HTMLDivElement|null>(null);
-  const hrRef = useRef<HTMLHRElement|null>(null);
-  const refArray = useMemo(() => {
-    return [logoContainerRef.current, hrRef.current].filter(item => Boolean(item))
-  }, [hrRef.current, logoContainerRef.current]);
-  useRevealEffect(
-    {borderSelector: refArray as HTMLElement[]},
-    {borderGradientSize: 200}
-  );
-
-
-  return (
-    <>
-      <div ref={logoContainerRef} className='logo-container'>
-        <img src="" className="logo" alt="logo" />
-      </div>
-      <hr ref={hrRef} className="hr"/>
-    </>
-  );
-}
-```
-Case 2
-```jsx
-const Home = () => {
- 
-  const gridPaperMap = [{
-    title: 'PersonalCenter',
-    icon: PersonalCenterIcon,
-    link: '',
-    onClick: drawerStore?.openPersonalCenter,
-  }, {
-    title: 'SphereViewer',
-    icon: SphereViewerIcon,
-    link: '/sphereviewer',
-  }, {
-    title: 'ShaderToy',
-    icon: Unity3DIcon,
-    link: '/shaderdisplay',
-  }];
-
-
-  const [gridRef, setGridRef] = useState<Array<HTMLDivElement|null>>([]);
-  useRevealEffect({
-    borderSelector: gridRef.filter(item => Boolean(item)) as Array<HTMLDivElement>
-  }, {
-    borderColor: "rgba(0, 0, 0, 0.3)"
-  });
-
-  return (
-    <>
-      <Grid>
-        {gridPaperMap.map((item, index: number) => (
-          <GridPaper
-            ref={el => {
-              setGridRef((pre: Array<HTMLDivElement|null>) => {
-                if(pre.length === gridPaperMap.length){
-                  return pre;
-                }
-                return pre.concat(el);
-              })
-            }}
-          />
-        ))}
-      </Grid>
-    </>
-  );
-}
-```
 ### Define borderStyle|borderClassName|borderRef when Parcel is not "shrink"
 &nbsp;&nbsp;&nbsp;&nbsp;If you have defined borderStyle|borderClassName|borderRef When RevealEffect component's options Parcel is not "shrink", they will take effect on the container element because if Parcel is not "shrink",the border effect will be added on the container element.
 
@@ -219,6 +154,11 @@ const Home = () => {
 &nbsp;
 
 ## Changelog
+### v2.0.0
+Update: \
+useRevealEffect accept MutableRefObject\<HTMLElement\>\
+Reveal Effect Config support mountOnBody option\
+Reveal Effect & Reveal Effect Config support component option
 ### v1.2.2
 Update Reveal Effect component's options: borderWidth & borderRadius support number type
 ### v1.2.1
@@ -231,3 +171,10 @@ Some types have been changed.
 ### v1.1.0
 Added a new option for RevealEffect component(parcel: "shrink").\
 ClickEffect won't be affected by EffectBackground.
+
+## Iteration Planning
+1. RevealEffect非入侵模式开发（不污染子元素的background-image）
+2. useRevealEffect返回信息更加详细
+3. 大量dom页面性能测试
+4. 单元测试补齐
+5. HomePage 完善

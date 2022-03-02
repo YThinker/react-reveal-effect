@@ -5,7 +5,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { RevealEffectConfig } from './components/RevealEffect';
+import { RevealEffectConfig } from './RevealEffect';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

@@ -5,21 +5,24 @@ import { useRevealEffect } from "./useRevealEffect";
 
 export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealEffectProps>>((props, ref) => {
 
-  const { 
+  const {
     children,
     style, className,
     borderStyle, borderClassName,
-    borderRef
+    borderRef,
+    component: Tag = "div",
+    ...restProps
   } = props;
-  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = props.config || {};
-  const borderRadius = typeof radius === "number" ? `${radius}px` : radius;
-  const borderWidth = typeof width === "number" ? `${width}px` : width;
 
   // only need one child
   if(!children || Children.count(children) !== 1){
-    throw new Error("Must and only needs one child");
+    throw new Error("<RevealEffect> element must and only needs one child");
   }
   const child = Children.only(children)
+
+  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = props.config || {};
+  const borderRadius = typeof radius === "number" ? `${radius}px` : radius;
+  const borderWidth = typeof width === "number" ? `${width}px` : width;
 
   // dom ref and styles
   const insiderBorderRef = useRef<HTMLDivElement|null>(null);
@@ -75,25 +78,37 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
 
   if(parcel === "parcel"){
     return (
-      <div ref={insiderBorderRef} style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }} className={className}>
+      <Tag ref={insiderBorderRef}
+        style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }}
+        className={className}
+        {...restProps}
+      >
         {cloneElement(
           child,
           {style: {borderRadius}, ref: insiderElementRef},
         )}
-      </div>
+      </Tag>
     );
   } else if(parcel === "shrink"){
     return (
-      <div ref={insiderBorderRef} style={{ ...shrinkStyles.border, ...style}} className={className}>
+      <Tag ref={insiderBorderRef}
+        style={{ ...shrinkStyles.border, ...style}}
+        className={className}
+        {...restProps}
+      >
         {cloneElement(
           child,
           {style: shrinkStyles.element, ref: insiderElementRef},
         )}
-      </div>
+      </Tag>
     );
   } else {
     return (
-      <div ref={safeContainerRef} style={{display: "inline-block", position: "relative", ...style}} className={className}>
+      <Tag ref={safeContainerRef}
+        style={{display: "inline-block", position: "relative", ...style}}
+        className={className}
+        {...restProps}
+      >
         <div ref={insiderBorderRef}
           style={{
             position: "absolute",
@@ -111,7 +126,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
           child,
           {style: {borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
         )}
-      </div>
+      </Tag>
     );
   }
 })

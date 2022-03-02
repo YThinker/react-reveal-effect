@@ -1,4 +1,4 @@
-import { PreProcessElement, PreProcessElements } from "./types";
+import { OptionsObject, PreProcessElement, PreProcessElements } from "./types";
 
 export function getOffset(element: PreProcessElement) {
 	return {
@@ -45,6 +45,16 @@ export function preProcessElements(elements: HTMLElement[]) {
 	return res;
 }
 
+export function getPreProcessElements(selector: HTMLElement | Array<HTMLElement>) {
+	let els;
+	if (selector instanceof Array) {
+		els = preProcessElements(selector)
+	} else {
+		els = preProcessElements([selector]);
+	}
+	return els;
+}
+
 export function isIntersected(
   element: PreProcessElement,
   cursor_x: number,
@@ -78,4 +88,18 @@ export function isIntersected(
 	const result = intersectRect(cursor_area, el_area)
 
 	return result
+}
+
+export function handleRemove(item: PreProcessElement, initKey?: keyof typeof item.removeMouseListener) {
+	if(initKey && item.removeMouseListener[initKey]){
+		(item.removeMouseListener[initKey]!)();
+		item.removeMouseListener[initKey] = null;
+	}
+	let key: keyof typeof item.removeMouseListener
+	for(key in item.removeMouseListener){
+		if(item.removeMouseListener[key]){
+			(item.removeMouseListener[key]!)();
+			item.removeMouseListener[key] = null;
+		}
+	}
 }

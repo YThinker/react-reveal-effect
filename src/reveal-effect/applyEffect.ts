@@ -1,59 +1,39 @@
 import { MutableRefObject } from "react";
-import * as Helpers from "./helpers";
+import { drawEffect, getOffset, getPreProcessElements, handleRemove, isIntersected } from "./helpers";
 
-import { EffectElement, EffectElements, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "./types";
+import { ApplyEffectInfoType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "./types";
 
 export function applyEffect(
-  borderSelector: EffectElement | EffectElements | undefined,
-  selector: EffectElement | EffectElements | undefined,
+  selector: HTMLElement | Array<HTMLElement>,
+  isContainer: boolean,
   options: GlobalEffectConfigType,
-  pageX: number,
-  pageY: number,
+  pageX: number|null,
+  pageY: number|null,
   initObject: MutableRefObject<InitObjectType | undefined>
-) {
+): ApplyEffectInfoType|undefined {
 
-  function assignOptions() {
-    return Object.assign({}, options);
+  if(pageX === null || pageY === null){
+    return;
   }
+
   function init() {
 
     if (initObject.current) {
       return initObject.current;
     }
-
     return {
-      options: assignOptions(),
-      childrenBorder: borderSelector ? getPreProcessElements(borderSelector) : undefined,
-      children: selector ? getPreProcessElements(selector) : undefined,
+      options: Object.assign({}, options),
+      childrenBorder: isContainer && selector ? getPreProcessElements(selector) : undefined,
+      children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
       isPressed: false
     };
-  }
-
-  function getPreProcessElements(selector: EffectElement | EffectElements) {
-    let els;
-    if (selector instanceof Array) {
-      els = Helpers.preProcessElements(selector.map(item => {
-        if (typeof item === "function") {
-          return item();
-        } else {
-          return item as HTMLElement;
-        }
-      }))
-    } else {
-      if (typeof selector === "function") {
-        els = Helpers.preProcessElements([selector()])
-      } else {
-        els = Helpers.preProcessElements([selector as HTMLElement]);
-      }
-    }
-    return els;
   }
 
   initObject.current = init();
   /**
    * @description To get the newest options
    */
-  initObject.current.options = assignOptions();
+  initObject.current.options = Object.assign({}, options);
 
   const initObjectCopy = initObject.current;
 
@@ -62,14 +42,13 @@ export function applyEffect(
    */
   if(!initObjectCopy.options.clickEffect){
     initObjectCopy.children?.forEach(item => {
-      item.removeMouseListener.mousedown && item.removeMouseListener.mousedown();
-      item.removeMouseListener.mousedown = null;
-      item.removeMouseListener.mouseup && item.removeMouseListener.mouseup();
-      item.removeMouseListener.mouseup = null;
+      handleRemove(item, "mousedown");
+      handleRemove(item, "mouseup");
     });
   }
   if(!initObjectCopy.options.effectBorder){
     removeChildrenBorderEventListener();
+    clearAllBorderEffect();
   }
 
   function clearEffect(element: PreProcessElement) {
@@ -91,18 +70,18 @@ export function applyEffect(
     }
     //element background effect --------------------
     const handleMousemoveEvent = (e: MouseEvent) => {
-      let x = e.pageX - Helpers.getOffset(element).left - window.scrollX
-      let y = e.pageY - Helpers.getOffset(element).top - window.scrollY
+      let x = e.pageX - getOffset(element).left - window.scrollX
+      let y = e.pageY - getOffset(element).top - window.scrollY
 
       const { options, isPressed } = initObjectCopy;
       if (options.clickEffect && isPressed) {
         let cssLightEffect = `radial-gradient(circle ${clickEffectGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickEffectColor || lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
         options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
 
-        Helpers.drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
+        drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
       }
       else if(options.effectBackground){
-        Helpers.drawEffect(element, x, y, lightColor, gradientSize)
+        drawEffect(element, x, y, lightColor, gradientSize)
       }
     }
     element.el.addEventListener("mousemove", handleMousemoveEvent);
@@ -130,13 +109,13 @@ export function applyEffect(
     }
     const handleMousedownEvent = (e: MouseEvent) => {
       initObjectCopy.isPressed = true;
-      const x = e.pageX - Helpers.getOffset(element).left - window.scrollX
-      const y = e.pageY - Helpers.getOffset(element).top - window.scrollY
+      const x = e.pageX - getOffset(element).left - window.scrollX
+      const y = e.pageY - getOffset(element).top - window.scrollY
 
       let cssLightEffect = `radial-gradient(circle ${clickEffectGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickEffectColor || lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
       initObjectCopy.options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
 
-      Helpers.drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
+      drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
     }
     element.el.addEventListener("mousedown", handleMousedownEvent)
     element.removeMouseListener.mousedown = () => element.el.removeEventListener("mousedown", handleMousedownEvent);
@@ -144,26 +123,26 @@ export function applyEffect(
 
     const handleMouseupEvent = (e: MouseEvent) => {
       initObjectCopy.isPressed = false
-      const x = e.pageX - Helpers.getOffset(element).left - window.scrollX
-      const y = e.pageY - Helpers.getOffset(element).top - window.scrollY
+      const x = e.pageX - getOffset(element).left - window.scrollX
+      const y = e.pageY - getOffset(element).top - window.scrollY
 
       initObjectCopy.options.effectBackground ?
-      Helpers.drawEffect(element, x, y, lightColor, gradientSize) : 
+      drawEffect(element, x, y, lightColor, gradientSize) : 
       clearEffect(element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
     element.removeMouseListener.mouseup = () => element.el.removeEventListener("mouseup", handleMouseupEvent);
   }
 
-  if (initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
+  if (isContainer && initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
     for (let i = 0; i < initObjectCopy.childrenBorder.length; i++) {
       const element = initObjectCopy.childrenBorder[i];
       const options = initObjectCopy.options;
-      const x = pageX - Helpers.getOffset(element).left - window.scrollX
-      const y = pageY - Helpers.getOffset(element).top - window.scrollY
+      const x = pageX - getOffset(element).left - window.scrollX
+      const y = pageY - getOffset(element).top - window.scrollY
 
-      if (Helpers.isIntersected(element, pageX, pageY, options.borderGradientSize)) {
-        Helpers.drawEffect(element, x, y, options.borderColor, options.borderGradientSize)
+      if (isIntersected(element, pageX, pageY, options.borderGradientSize)) {
+        drawEffect(element, x, y, options.borderColor, options.borderGradientSize)
       }
       else {
         clearEffect(element);
@@ -172,7 +151,7 @@ export function applyEffect(
     }
   }
 
-  if (initObjectCopy?.children) {
+  if (!isContainer && initObjectCopy?.children) {
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
       const options = initObjectCopy.options;
@@ -185,24 +164,15 @@ export function applyEffect(
   }
 
 
-  function clearEl(item: PreProcessElement) {
-    clearEffect(item);
-    let key: keyof typeof item.removeMouseListener
-    for(key in item.removeMouseListener){
-      if(item.removeMouseListener[key]){
-        (item.removeMouseListener[key] as () => void)();
-        item.removeMouseListener[key] = null;
-      }
-    }
-  }
+
   function removeChildrenEventListener() {
     initObject.current?.children?.forEach(item => {
-      clearEl(item);
+      handleRemove(item);
     })
   }
   function removeChildrenBorderEventListener() {
     initObject.current?.childrenBorder?.forEach(item => {
-      clearEl(item);
+      handleRemove(item);
     });
   }
   function clearAllBackgroundEffect() {
@@ -214,11 +184,15 @@ export function applyEffect(
   /**
    * @description Clear Effect
    */
-  return function removeEffect() {
-    removeChildrenEventListener();
-    removeChildrenBorderEventListener();
-    clearAllBorderEffect();
-    clearAllBackgroundEffect();
-    initObject.current = undefined;
+  return {
+    borderIsIntersected: initObjectCopy.childrenBorder?.map(element => isIntersected(element, pageX, pageY, options.borderGradientSize)),
+    elementIsIntersected: initObjectCopy.children?.map(element => isIntersected(element, pageX, pageY, options.borderGradientSize)),
+    removeEffect() {
+      removeChildrenEventListener();
+      removeChildrenBorderEventListener();
+      clearAllBorderEffect();
+      clearAllBackgroundEffect();
+      initObject.current = undefined;
+    }
   }
 }

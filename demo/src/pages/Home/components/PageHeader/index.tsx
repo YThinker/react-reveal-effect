@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react"
-import { useRevealEffect } from "../RevealEffect";
+import { useRevealEffect } from "../../../../RevealEffect";
 
 import { Box, Link, Typography, Skeleton } from "@mui/material";
-import GithubIcon from "../../img/GithubIcon";
-import NpmIcon from "../../img/NpmIcon";
+import GithubIcon from "../../../../img/GithubIcon";
+import NpmIcon from "../../../../img/NpmIcon";
 
-import logo from "../../img/logo.svg";
+import logo from "../../../../img/logo.svg";
 
 const PageHeader = () => {
-
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
-  useRevealEffect(
-    {borderSelector: logoContainerRef},
+  const removeRevealEffect = useRevealEffect(
+    {borderSelector: logoContainerRef.current},
     {borderGradientSize: 200}
   );
 
@@ -33,7 +32,7 @@ const PageHeader = () => {
   return (
     <>
       <Box component="header" sx={{ position: "relative", textAlign: "center", height: "100vh" }}>
-        <Box ref={logoContainerRef} sx={{
+        <Box ref={logoContainerRef} onClick={removeRevealEffect.triggerRun} sx={{
           minWidth: "20vmin",
           minHeight: "20vmin",
           marginTop: "8vh",

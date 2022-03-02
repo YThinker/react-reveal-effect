@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { useRevealEffect } from '../RevealEffect';
+import { useRevealEffect } from '../../../../RevealEffect';
 import "./Hr.css";
 
 const Hr = () => {
