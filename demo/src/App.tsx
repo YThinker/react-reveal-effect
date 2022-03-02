@@ -11,7 +11,7 @@ const App = () => (
     <AppBar />
     <BrowserRouter basename={
       process.env.NODE_ENV === 'production' ?
-      "https://ythinker.github.io/react-reveal-effect" :
+      "/react-reveal-effect" :
       ""
     }>
       <Routes>
