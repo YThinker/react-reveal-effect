@@ -9,7 +9,11 @@ const App = () => (
     palette: { mode: "dark", },
   })}>
     <AppBar />
-    <BrowserRouter>
+    <BrowserRouter basename={
+      process.env.NODE_ENV === 'production' ?
+      "https://ythinker.github.io/react-reveal-effect" :
+      ""
+    }>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/docs" element={<Docs />} />
