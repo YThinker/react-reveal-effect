@@ -9,12 +9,10 @@ const App = () => (
     palette: { mode: "dark", },
   })}>
     <AppBar />
-    <HashRouter>
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="/docs" element={<Docs />} />
-      </Routes>
-    </HashRouter>
+    <Routes>
+      <Route index element={<Home />} />
+      <Route path="/docs" element={<Docs />} />
+    </Routes>
   </ThemeProvider>
 );
 

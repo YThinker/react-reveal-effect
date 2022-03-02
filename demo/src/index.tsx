@@ -8,12 +8,15 @@ import '@fontsource/roboto/700.css';
 import { RevealEffectConfig } from './RevealEffect';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { HashRouter } from 'react-router-dom';
 
 render(
   <StrictMode>
-    <RevealEffectConfig>
-      <App />
-    </RevealEffectConfig>
+    <HashRouter>
+      <RevealEffectConfig>
+        <App />
+      </RevealEffectConfig>
+    </HashRouter>
   </StrictMode>,
   document.getElementById('root')
 );

@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Typography, Button, Link } from "@mui/material"
+import { AppBar, Toolbar, Typography, Button } from "@mui/material"
 import { makeStyles } from '@mui/styles';
+import { Link } from "react-router-dom";
 
 import logo from "../../img/logo.svg";
 
@@ -13,7 +14,7 @@ export default () => {
       backdropFilter: "blur(10px)"
     }}>
       <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
-        <Link href="/" sx={{fontSize: 0}}>
+        <Link to="/">
           <img className={classes.logo} src={logo}/>
         </Link>
         {/* <Link href="/docs" color="inherit">Docs</Link> */}
