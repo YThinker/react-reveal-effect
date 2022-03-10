@@ -94,7 +94,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "./",
+  "homepage": "https://ythinker.github.io/react-reveal-effect",
   "jest": {
     "roots": [
       "<rootDir>/src"

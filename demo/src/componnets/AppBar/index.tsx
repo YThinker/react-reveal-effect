@@ -14,7 +14,7 @@ export default () => {
       backdropFilter: "blur(10px)"
     }}>
       <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
-        <Link to="/">
+        <Link to="/docs">
           <img className={classes.logo} src={logo}/>
         </Link>
         {/* <Link href="/docs" color="inherit">Docs</Link> */}
