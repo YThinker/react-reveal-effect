@@ -6,8 +6,12 @@ import GithubIcon from "../../../../img/GithubIcon";
 import NpmIcon from "../../../../img/NpmIcon";
 
 import logo from "../../../../img/logo.svg";
+import { makeStyles } from "@mui/styles";
 
 const PageHeader = () => {
+
+  const classes = useStyles();
+
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
   const removeRevealEffect = useRevealEffect(
     {borderSelector: logoContainerRef.current},
@@ -21,13 +25,6 @@ const PageHeader = () => {
     img.src = logo;
     return () => { img.onload = null; }
   }, []);
-
-  const imgStyles = {
-    width: "auto",
-    height: "30vmin",
-    borderRadius: "16px",
-    padding: "20px",
-  }
 
   return (
     <>
@@ -44,13 +41,8 @@ const PageHeader = () => {
           overflow: "hidden"
         }}>
           {imgReady ? 
-            <img src={logo} style={{
-              ...imgStyles, 
-              pointerEvents: "none",
-              userSelect: "none",
-              backgroundColor: "#282c34"
-            }} alt="logo" /> : 
-            <Skeleton sx={{...imgStyles, width: "30vmin"}} variant="rectangular" />
+            <img src={logo} className={classes.logo} alt="logo" /> : 
+            <Skeleton sx={imgStyles} variant="rectangular" />
           }
         </Box>
         <Typography
@@ -90,5 +82,23 @@ const PageHeader = () => {
     </>
   );
 }
+
+const imgStyles = {
+  width: "30vmin",
+  height: "30vmin",
+  borderRadius: "16px",
+  padding: "20px",
+}
+const useStyles = makeStyles(() => ({
+  logo: {
+    ...imgStyles,
+    pointerEvents: "none",
+    userSelect: "none",
+    backgroundColor: "#282c34"
+  },
+  sketelon: {
+    ...imgStyles
+  }
+}));
 
 export default PageHeader;

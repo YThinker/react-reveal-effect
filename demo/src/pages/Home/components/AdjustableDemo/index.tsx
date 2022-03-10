@@ -83,7 +83,7 @@ const AdjustableDemo = () => {
         </RevealEffect>
         <RevealEffect config={listItemEffectConfig}>
           <ListItem sx={{ backgroundColor: "#282c34" }}>
-            <ListItemText primary="Border Radius"/>
+            <ListItemText primary="Border Width"/>
             <Slider size="small" name="borderWidth"
               sx={{width: "50%"}}
               max={10} valueLabelDisplay="auto"
