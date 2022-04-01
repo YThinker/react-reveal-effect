@@ -1,31 +1,38 @@
-import { AppBar, Toolbar, Typography, Button } from "@mui/material"
-import { makeStyles } from '@mui/styles';
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Link, Box, Theme, styled, Container } from "@mui/material"
 
 import logo from "../../img/logo.svg";
 
-export default () => {
+const Logo = styled("img")({
+  width: 64,
+  height: "auto"
+});
+const LinkStyles = {
+  marginLeft: (theme: Theme) => theme.spacing(2)
+}
 
-  const classes = useStyles();
+export default () => {
 
   return (
     <AppBar position="sticky" sx={{
       backgroundColor: "transparent",
       backdropFilter: "blur(10px)"
     }}>
-      <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
-        <Link to="/docs">
-          <img className={classes.logo} src={logo}/>
+      <Container maxWidth="xl" sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <Link href="#/">
+          <Logo src={logo}/>
         </Link>
-        {/* <Link href="/docs" color="inherit">Docs</Link> */}
-      </Toolbar>
+        <Box>
+          <Link sx={LinkStyles} variant="button" href="#/demo" color="inherit" underline="hover">
+            Demo
+          </Link>
+          <Link sx={LinkStyles} variant="button" href="#/docs" color="inherit" underline="hover">
+            Docs
+          </Link>
+          <Link sx={LinkStyles} variant="button" href="#/changelog" color="inherit" underline="hover">
+            Changelog
+          </Link>
+        </Box>
+      </Container>
     </AppBar>
   )
 }
-
-const useStyles = makeStyles(() => ({
-  logo: {
-    width: 64,
-    height: "auto"
-  }
-}));

@@ -9,13 +9,22 @@ import { RevealEffectConfig } from './RevealEffect';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: { mode: "dark" }
+});
 
 render(
   <StrictMode>
     <HashRouter>
-      <RevealEffectConfig>
-        <App />
-      </RevealEffectConfig>
+      <ThemeProvider theme={theme}>
+        <StyledEngineProvider injectFirst>
+          <RevealEffectConfig>
+            <App />
+          </RevealEffectConfig>
+        </StyledEngineProvider>
+      </ThemeProvider>
     </HashRouter>
   </StrictMode>,
   document.getElementById('root')

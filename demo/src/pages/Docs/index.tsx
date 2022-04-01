@@ -1,4 +1,4 @@
-export default () => {
+const Docs = () => {
 
   return (
     <>
@@ -6,3 +6,5 @@ export default () => {
     </>
   )
 }
+
+export default Docs;

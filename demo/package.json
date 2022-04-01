@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
+    "@emotion/styled": "^11.8.1",
     "@fontsource/roboto": "^4.5.1",
     "@mui/material": "^5.3.0",
+    "framer-motion": "^6.2.8",
     "react": "^17.0.2",
     "react-app-polyfill": "^3.0.0",
     "react-dom": "^17.0.2",
@@ -14,7 +15,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@mui/styles": "^5.4.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.16.1",

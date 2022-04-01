@@ -1,16 +1,26 @@
 import { useEffect, useRef, useState } from "react"
 import { useRevealEffect } from "../../../../RevealEffect";
 
-import { Box, Link, Typography, Skeleton } from "@mui/material";
+import { Box, Link, Typography, Skeleton, styled, Button, Card } from "@mui/material";
 import GithubIcon from "../../../../img/GithubIcon";
 import NpmIcon from "../../../../img/NpmIcon";
 
 import logo from "../../../../img/logo.svg";
-import { makeStyles } from "@mui/styles";
+
+const imgStyles = {
+  width: "30vmin",
+  height: "30vmin",
+  borderRadius: "16px",
+  padding: "20px",
+}
+const Logo = styled("img")({
+  ...imgStyles,
+  pointerEvents: "none",
+  userSelect: "none",
+  backgroundColor: "#282c34"
+})
 
 const PageHeader = () => {
-
-  const classes = useStyles();
 
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
   const removeRevealEffect = useRevealEffect(
@@ -41,7 +51,7 @@ const PageHeader = () => {
           overflow: "hidden"
         }}>
           {imgReady ? 
-            <img src={logo} className={classes.logo} alt="logo" /> : 
+            <Logo src={logo} alt="logo" /> : 
             <Skeleton sx={imgStyles} variant="rectangular" />
           }
         </Box>
@@ -67,6 +77,10 @@ const PageHeader = () => {
         >
           Reveal Effect of Fluent Design for React
         </Typography>
+        <Box>
+          <Button>Docs</Button>
+          <Card>npm install react-reveal-effect</Card>
+        </Box>
         <Box sx={{
           marginTop: "4vmin"
         }}>
@@ -83,22 +97,5 @@ const PageHeader = () => {
   );
 }
 
-const imgStyles = {
-  width: "30vmin",
-  height: "30vmin",
-  borderRadius: "16px",
-  padding: "20px",
-}
-const useStyles = makeStyles(() => ({
-  logo: {
-    ...imgStyles,
-    pointerEvents: "none",
-    userSelect: "none",
-    backgroundColor: "#282c34"
-  },
-  sketelon: {
-    ...imgStyles
-  }
-}));
 
 export default PageHeader;

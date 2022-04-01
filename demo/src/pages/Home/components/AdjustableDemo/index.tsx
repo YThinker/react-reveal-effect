@@ -1,10 +1,12 @@
 import { Box, Grid, List, ListItem, ListItemText, Slider, Switch } from "@mui/material";
 import { ChangeEvent, useMemo, useState } from "react";
 import { RevealEffect } from "../../../../RevealEffect";
+import { RevealEffectStylesType } from "../../../../RevealEffect/types";
 
 const AdjustableDemo = () => {
   const [config, setConfig] = useState({
     clickEffect: true,
+    clickEffectColor: "rgba(255, 255, 255, 0.2)",
     effectBackground: true,
     effectBorder: true,
     borderRadius: 8,
