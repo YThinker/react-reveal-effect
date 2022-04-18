@@ -1,4 +1,4 @@
-import { OptionsObject, PreProcessElement, PreProcessElements } from "./types";
+import { PreProcessElement, PreProcessElements } from "./types";
 
 export function getOffset(element: PreProcessElement) {
 	return {

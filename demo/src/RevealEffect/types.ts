@@ -1,14 +1,72 @@
-import { CSSProperties, ElementType, MutableRefObject, ReactElement } from "react";
+import { ComponentPropsWithRef, CSSProperties, ElementType, MutableRefObject, PropsWithChildren, ReactElement } from "react";
 
-export interface OptionsObject {
-  [key: string]: any;
+export type DistributiveOmit<T, U> = T extends any
+  ? Pick<T, Exclude<keyof T, U>>
+  : never;
+
+export interface OverridableTypeMap {
+  props: {};
+  defaultComponent: ElementType;
 }
+
+/**
+* Props defined on the component
+*/
+// prettier-ignore
+export type BaseProps<M extends OverridableTypeMap> = M['props'] & CommonProps;
+
+/**
+* Props of the component if `component={Component}` is used.
+*/
+// prettier-ignore
+export type OverrideProps<
+  M extends OverridableTypeMap,
+  C extends ElementType
+  > = (
+    & BaseProps<M>
+    & DistributiveOmit<ComponentPropsWithRef<C>, keyof BaseProps<M>>
+  );
+
+/**
+* Props if `component={Component}` is NOT used.
+*/
+// prettier-ignore
+export type DefaultComponentProps<M extends OverridableTypeMap> =
+  & BaseProps<M>
+  & DistributiveOmit<ComponentPropsWithRef<M['defaultComponent']>, keyof BaseProps<M>>;
+
+/**
+* Props that are valid for material-ui components.
+*/
+// each component declares it's classes in a separate interface for proper JSDoc.
+export interface CommonProps {
+  className?: string;
+  // style?: CSSProperties;
+}
+/**
+ * A component whose root component can be controlled via a `component` prop.
+ *
+ * Adjusts valid props based on the type of `component`.
+ */
+export interface OverridableComponent<M extends OverridableTypeMap> {
+  <C extends ElementType>(
+    props: {
+      /**
+       * The component used for the root node.
+       * Either a string to use a HTML element or a component.
+       */
+      component: C;
+    } & OverrideProps<M, C>,
+  ): JSX.Element;
+  (props: DefaultComponentProps<M>): JSX.Element;
+}
+
+
 
 export interface PositionProps {
-  pageX: number|null,
-  pageY: number|null,
+  pageX: number | null,
+  pageY: number | null,
 }
-
 
 export interface GlobalEffectConfigType {
   borderColor: string,
@@ -33,17 +91,22 @@ export interface EffectOptionsType {
   effectBackground?: boolean,
 }
 
-export interface ConfigComponentProps {
-  mountOnBody?: boolean;
-  component?: ElementType;
+
+
+export interface ConfigComponentProps<B extends boolean> {
+  mountOnBody?: B;
   config?: EffectOptionsType;
-  [key: string]: any;
+  component?: B extends true ? never : ElementType;
+}
+export interface ConfigComponentTypeMap<B extends boolean = true, D extends ElementType = 'div', P = {}> {
+  props: P & PropsWithChildren<ConfigComponentProps<B>>;
+  defaultComponent: D;
 }
 
 export type EffectElement = HTMLElement | (() => HTMLElement) | Element | null;
-export type EffectElementRef = MutableRefObject<HTMLElement|null>;
+export type EffectElementRef = MutableRefObject<HTMLElement | null>;
 export type EffectElements = EffectElement[];
-export type EffectElementRefs = Array<MutableRefObject<HTMLElement|null>>;
+export type EffectElementRefs = Array<MutableRefObject<HTMLElement | null>>;
 
 export interface PreProcessElement {
   oriBg: CSSStyleDeclaration["backgroundImage"],
@@ -66,21 +129,22 @@ export interface InitObjectType {
   isPressed: boolean
 }
 
-type PracelType = "parcel"|"shrink"|"safe";
+type PracelType = "parcel" | "shrink" | "safe";
 export interface RevealEffectStylesType extends EffectOptionsType {
-  borderWidth?: string|number,
-  borderRadius?: string|number,
+  borderWidth?: string | number,
+  borderRadius?: string | number,
 
   /**
    * 是否使用非入侵式包裹光效
    * @description "parcel" 使用对布局有影响的光效包裹元素，包裹使用光效的元素的父元素会有一段溢出的宽高
    * @description "shrink" 破坏性更改使用光效的元素，缩放使用光效的元素的宽高
    * @description "safe" 不对布局产生影响，也不更改使用光效的元素，通过插入一个absolute元素的方式添加边框光效（可能会被overflow遮挡）
+   * @default "safe"
    */
-  parcel?: PracelType,
+  parcel?: "parcel" | "shrink" | "safe",
 }
 
-export interface RevealEffectProps  {
+export interface RevealEffectComponentProps {
   component?: ElementType;
   config?: RevealEffectStylesType;
   children: ReactElement<HTMLElement>;
@@ -88,12 +152,12 @@ export interface RevealEffectProps  {
   /**
    * @description container style
    */
-  style?: CSSProperties | undefined;
+  // style?: CSSProperties | undefined;
 
   /**
    * @description container className
    */
-  className?: string | undefined;
+  // className?: string | undefined;
 
   /**
    * @description (It works only when parcel = "shrink") border style
@@ -110,7 +174,11 @@ export interface RevealEffectProps  {
    */
   borderRef?: MutableRefObject<HTMLDivElement | null>;
 
-  [key: string]: any;
+  // [key: string]: any;
+}
+export interface RevealEffectComponentTypeMap<D extends ElementType = 'div', P = {}> {
+  props: P & PropsWithChildren<RevealEffectComponentProps>;
+  defaultComponent: D;
 }
 
 export interface ApplyEffectInfoType {

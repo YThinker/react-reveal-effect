@@ -1,5 +1,6 @@
-import { createContext, PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
-import { ConfigComponentProps, GlobalEffectConfigType, PositionProps } from "./types";
+import { createContext, forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import useForkRef from "./hooks/useForkRef";
+import { ConfigComponentTypeMap, GlobalEffectConfigType, OverridableComponent, PositionProps } from "./types";
 
 export const MousePosition = createContext<PositionProps>({
   pageX: null,
@@ -19,7 +20,7 @@ const globalConfig = {
 }
 export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
 
-export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps>) => {
+export const RevealEffectConfig = forwardRef((props, ref) => {
 
   const {
     mountOnBody = true,
@@ -31,7 +32,8 @@ export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps
 
   const [position, setPosition] = useState<PositionProps>({pageX: null, pageY: null});
 
-  const mountElement = useRef<HTMLDivElement|null>(null);
+  const mountElement = useRef<HTMLElement|null>(null);
+  const forkRef = useForkRef(mountElement, ref)
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     setPosition(pre => ({...pre, pageX: e.pageX, pageY: e.pageY}))
@@ -66,13 +68,13 @@ export const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps
     <MousePosition.Provider value={position}>
       <EffectConfig.Provider value={config}>
         {
-          mountOnBody ? 
-            children : 
-            <Tag ref={mountElement}
+          mountOnBody ?
+            children :
+            <Tag ref={forkRef}
               {...restProps}
             >{children}</Tag>
         }
       </EffectConfig.Provider>
     </MousePosition.Provider>
   );
-}
+}) as OverridableComponent<ConfigComponentTypeMap<true, never>|ConfigComponentTypeMap<false>>

@@ -59,10 +59,6 @@ export function applyEffect(
 
   function enableBackgroundEffects(
     element: PreProcessElement,
-    clickEffectColor: string,
-    lightColor: string,
-    clickEffectGradientSize: number,
-    gradientSize: number,
   ) {
 
     if (element.removeMouseListener.mousemove || element.removeMouseListener.mouseleave) {
@@ -70,6 +66,8 @@ export function applyEffect(
     }
     //element background effect --------------------
     const handleMousemoveEvent = (e: MouseEvent) => {
+      const { clickEffectColor, lightColor, clickEffectGradientSize, lightGradientSize: gradientSize } = initObjectCopy.options;
+
       let x = e.pageX - getOffset(element).left - window.scrollX
       let y = e.pageY - getOffset(element).top - window.scrollY
 
@@ -97,11 +95,7 @@ export function applyEffect(
 
 
   function enableClickEffects(
-    element: PreProcessElement,
-    clickEffectColor: string,
-    lightColor: string,
-    clickEffectGradientSize: number,
-    gradientSize: number,
+    element: PreProcessElement
   ) {
 
     if (element.removeMouseListener.mousedown || element.removeMouseListener.mouseup) {
@@ -109,6 +103,9 @@ export function applyEffect(
     }
     const handleMousedownEvent = (e: MouseEvent) => {
       initObjectCopy.isPressed = true;
+
+      const { clickEffectColor, lightColor, clickEffectGradientSize, lightGradientSize: gradientSize } = initObjectCopy.options;
+
       const x = e.pageX - getOffset(element).left - window.scrollX
       const y = e.pageY - getOffset(element).top - window.scrollY
 
@@ -122,12 +119,15 @@ export function applyEffect(
 
 
     const handleMouseupEvent = (e: MouseEvent) => {
-      initObjectCopy.isPressed = false
+      initObjectCopy.isPressed = false;
+
+      const { lightColor, lightGradientSize: gradientSize } = initObjectCopy.options;
+
       const x = e.pageX - getOffset(element).left - window.scrollX
       const y = e.pageY - getOffset(element).top - window.scrollY
 
       initObjectCopy.options.effectBackground ?
-      drawEffect(element, x, y, lightColor, gradientSize) : 
+      drawEffect(element, x, y, lightColor, gradientSize) :
       clearEffect(element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
@@ -156,10 +156,10 @@ export function applyEffect(
       const element = initObjectCopy.children[i];
       const options = initObjectCopy.options;
       //element background effect
-      enableBackgroundEffects(element, options.clickEffectColor, options.lightColor, options.clickEffectGradientSize, options.lightGradientSize)
+      enableBackgroundEffects(element)
 
       //element click effect
-      options.clickEffect && enableClickEffects(element, options.clickEffectColor, options.lightColor, options.clickEffectGradientSize, options.lightGradientSize)
+      options.clickEffect && enableClickEffects(element)
     }
   }
 

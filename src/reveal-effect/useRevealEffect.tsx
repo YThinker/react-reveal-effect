@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { applyEffect } from "./applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
 import { ApplyEffectInfoType, EffectElementRef, EffectElementRefs, EffectOptionsType, InitObjectType } from "./types";
@@ -18,7 +18,7 @@ export const useRevealEffect = (
   }
 
   const globalConfig = useContext(EffectConfig);
-  
+
   const initBorderObject = useRef<InitObjectType | undefined>();
   const initElementObject = useRef<InitObjectType | undefined>();
 
@@ -66,7 +66,7 @@ export const useRevealEffect = (
       } else {
         elementSelector = handleSelector(selector.elementSelector);
       }
-  
+
       if(borderSelector){
         borderInfo.current = draw(borderSelector, true)
       }

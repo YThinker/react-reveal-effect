@@ -1,9 +1,10 @@
-import { Children, cloneElement, forwardRef, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { RevealEffectProps } from "./types";
+import { Children, cloneElement, forwardRef, useEffect, useRef, useState } from "react";
+import useForkRef from "./hooks/useForkRef";
+import { OverridableComponent, RevealEffectComponentTypeMap } from "./types";
 import { useRevealEffect } from "./useRevealEffect";
 
 
-export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealEffectProps>>((props, ref) => {
+export const RevealEffect = forwardRef((props, ref) => {
 
   const {
     children,
@@ -11,6 +12,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
     borderStyle, borderClassName,
     borderRef,
     component: Tag = "div",
+    config,
     ...restProps
   } = props;
 
@@ -20,14 +22,20 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
   }
   const child = Children.only(children)
 
-  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = props.config || {};
+  // handle border style props
+  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = config || {};
   const borderRadius = typeof radius === "number" ? `${radius}px` : radius;
   const borderWidth = typeof width === "number" ? `${width}px` : width;
 
-  // dom ref and styles
-  const insiderBorderRef = useRef<HTMLDivElement|null>(null);
+  // dom ref & expose ref
+  const insiderBorderRef = useRef<HTMLElement|null>(null);
+  const forkBorderRef = useForkRef(insiderBorderRef, borderRef);
+
+  const forkContainerRef = useForkRef(forkBorderRef, ref);
+
   const insiderElementRef = useRef(null);
-  const safeContainerRef = useRef(null);
+
+  // initial shrink styles state
   const [shrinkStyles, setShrinkStyles] = useState({
     border: {},
     element: {}
@@ -55,30 +63,16 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
       })
     }
   }, [borderWidth, borderRadius, parcel])
+
   // use reveal effect
   useRevealEffect({
     borderSelector: insiderBorderRef,
     elementSelector: insiderElementRef
   }, options);
 
-  // forward and expose dom ref
-  // expose container ref
-  useImperativeHandle<HTMLDivElement|null, HTMLDivElement|null>(ref, () => {
-    if(parcel === "safe"){
-      return safeContainerRef.current;
-    }
-    return insiderBorderRef.current;
-  }, [parcel])
-  // expose border ref
-  useImperativeHandle<HTMLDivElement|null, HTMLDivElement|null>(
-    borderRef,
-    () => insiderBorderRef.current,
-    [insiderBorderRef]
-  )
-
   if(parcel === "parcel"){
     return (
-      <Tag ref={insiderBorderRef}
+      <Tag ref={forkContainerRef}
         style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }}
         className={className}
         {...restProps}
@@ -91,7 +85,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
     );
   } else if(parcel === "shrink"){
     return (
-      <Tag ref={insiderBorderRef}
+      <Tag ref={forkContainerRef}
         style={{ ...shrinkStyles.border, ...style}}
         className={className}
         {...restProps}
@@ -104,13 +98,14 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
     );
   } else {
     return (
-      <Tag ref={safeContainerRef}
+      <Tag ref={ref}
         style={{display: "inline-block", position: "relative", ...style}}
         className={className}
         {...restProps}
       >
-        <div ref={insiderBorderRef}
+        <span ref={forkBorderRef}
           style={{
+            display: "block",
             position: "absolute",
             width: `calc(100% + ${borderWidth} + ${borderWidth})`,
             height: `calc(100% + ${borderWidth} + ${borderWidth})`,
@@ -121,7 +116,7 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
             ...borderStyle
           }}
           className={borderClassName}
-        ></div>
+        ></span>
         {cloneElement(
           child,
           {style: {borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
@@ -129,4 +124,4 @@ export const RevealEffect = forwardRef<HTMLDivElement, PropsWithChildren<RevealE
       </Tag>
     );
   }
-})
+}) as OverridableComponent<RevealEffectComponentTypeMap>

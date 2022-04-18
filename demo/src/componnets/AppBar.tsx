@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Link, Box, Theme, styled, Container } from "@mui/material"
 
-import logo from "../../img/logo.svg";
+import logo from "../img/logo.svg";
 
 const Logo = styled("img")({
   width: 64,
@@ -13,11 +13,11 @@ const LinkStyles = {
 export default () => {
 
   return (
-    <AppBar position="sticky" sx={{
+    <AppBar position="fixed" sx={{
       backgroundColor: "transparent",
       backdropFilter: "blur(10px)"
     }}>
-      <Container maxWidth="xl" sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+      <Container sx={{display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 1200}}>
         <Link href="#/">
           <Logo src={logo}/>
         </Link>

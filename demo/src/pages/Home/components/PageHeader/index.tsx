@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react"
 import { useRevealEffect } from "../../../../RevealEffect";
 
-import { Box, Link, Typography, Skeleton, styled, Button, Card } from "@mui/material";
+import { Box, Link, Typography, Skeleton, styled, Button, Card, Grid, Container } from "@mui/material";
+import { ArrowRight, ContentCopy, Done } from '@mui/icons-material';
+import copy from "copy-to-clipboard";
+
 import GithubIcon from "../../../../img/GithubIcon";
 import NpmIcon from "../../../../img/NpmIcon";
 
 import logo from "../../../../img/logo.svg";
 
 const imgStyles = {
-  width: "30vmin",
-  height: "30vmin",
+  width: "24vmin",
+  height: "24vmin",
   borderRadius: "16px",
   padding: "20px",
 }
@@ -19,6 +22,8 @@ const Logo = styled("img")({
   userSelect: "none",
   backgroundColor: "#282c34"
 })
+
+const marginBottom = "max(5vh, 30px)"
 
 const PageHeader = () => {
 
@@ -36,31 +41,57 @@ const PageHeader = () => {
     return () => { img.onload = null; }
   }, []);
 
+
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [timer, setTimer] = useState<number>(0);
+  useEffect(() => {
+    if(copySuccess){
+      const timer = window.setTimeout(() => setCopySuccess(false), 2000);
+      setTimer(timer);
+    }
+  }, [copySuccess, setCopySuccess]);
+  useEffect(() => clearTimeout(timer), []);
+
+  const copyCommand = () => {
+    copy("npm install react-reveal-effect");
+    setCopySuccess(true);
+  }
+
   return (
-    <>
-      <Box component="header" sx={{ position: "relative", textAlign: "center", height: "100vh" }}>
-        <Box ref={logoContainerRef} onClick={removeRevealEffect.triggerRun} sx={{
-          minWidth: "20vmin",
-          minHeight: "20vmin",
-          marginTop: "8vh",
-          display: "inline-block",
-          padding: "1px",
-          fontSize: 0,
-          backgroundColor: "rgba(100, 100, 100, 0.2)",
-          borderRadius: "16px",
-          overflow: "hidden"
-        }}>
-          {imgReady ? 
-            <Logo src={logo} alt="logo" /> : 
-            <Skeleton sx={imgStyles} variant="rectangular" />
-          }
-        </Box>
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
+        height: "calc(100vh - 60px)",
+        maxWidth: 1200,
+        textAlign: "center"
+      }}
+    >
+      <Box ref={logoContainerRef} onClick={removeRevealEffect.triggerRun} sx={{
+        minWidth: "20vmin",
+        minHeight: "20vmin",
+        marginBottom,
+        display: "inline-block",
+        padding: "1px",
+        fontSize: 0,
+        backgroundColor: "rgba(100, 100, 100, 0.2)",
+        borderRadius: "16px",
+        overflow: "hidden"
+      }}>
+        {imgReady ?
+          <Logo src={logo} alt="logo" /> :
+          <Skeleton sx={imgStyles} variant="rectangular" />
+        }
+      </Box>
+      <Box sx={{ marginBottom }}>
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "calc(10px + 10vmin)",
+            fontSize: "calc(10px + 8vmin)",
             letterSpacing: 1,
-            marginTop: "10vh"
           }}
           variant="h1" component="h1"
         >
@@ -69,31 +100,43 @@ const PageHeader = () => {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "calc(10px + 2vmin)",
+            fontSize: "max(calc(10px + 1vmin), 20px)",
             fontWeight: 400,
-            marginTop: "5vh"
+            marginTop: "1em"
           }}
           variant="subtitle1"
         >
           Reveal Effect of Fluent Design for React
         </Typography>
-        <Box>
-          <Button>Docs</Button>
-          <Card>npm install react-reveal-effect</Card>
-        </Box>
-        <Box sx={{
-          marginTop: "4vmin"
-        }}>
-          <Link sx={{margin: "0 20px"}} href="https://github.com/YThinker/react-reveal-effect" target="_blank">
-            <GithubIcon sx={{fontSize: 40}}/>
-          </Link>
-          <Link sx={{margin: "0 20px"}} href="https://www.npmjs.com/package/react-reveal-effect" target="_blank">
-            <NpmIcon sx={{fontSize: 40}}/>
-          </Link>
-        </Box>
-
       </Box>
-    </>
+      <Grid container justifyContent="center" alignItems="center"
+        gap={3} sx={{ marginBottom }}
+      >
+        <Button variant="contained" href="#/docs" endIcon={<ArrowRight />}>Docs</Button>
+        <Button
+          sx={{
+            textTransform: "none",
+            color: "#fff",
+            backgroundColor: "#000",
+            padding: "6px 16px"
+          }} endIcon={copySuccess ? <Done color="primary"/> : <ContentCopy />}
+          onClick={copyCommand}
+        >
+          <Typography component="code"
+            sx={{fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace"}}
+          >npm install react-reveal-effect</Typography>
+        </Button>
+      </Grid>
+      <Box>
+        <Link sx={{margin: "0 20px", display: "inline-block"}} href="https://github.com/YThinker/react-reveal-effect" target="_blank">
+          <GithubIcon sx={{fontSize: 40}}/>
+        </Link>
+        <Link sx={{margin: "0 20px", display: "inline-block"}} href="https://www.npmjs.com/package/react-reveal-effect" target="_blank">
+          <NpmIcon sx={{fontSize: 40}}/>
+        </Link>
+      </Box>
+
+    </Container>
   );
 }
 

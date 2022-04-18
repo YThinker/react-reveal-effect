@@ -1,16 +1,50 @@
-import { Box, Grid, List, ListItem, ListItemText, Slider, Switch } from "@mui/material";
-import { ChangeEvent, useMemo, useState } from "react";
+import { Box, Container, Grid, List, ListItem, ListItemText, Slider, Switch, Typography } from "@mui/material";
+import { motion } from "framer-motion";
+import { ChangeEvent, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { ColorResult } from "react-color";
+import ColorPicker from "../../../../componnets/ColorPicker";
 import { RevealEffect } from "../../../../RevealEffect";
 import { RevealEffectStylesType } from "../../../../RevealEffect/types";
 
+
+const listItemEffectConfig: RevealEffectStylesType = {
+  clickEffect: false,
+  effectBackground: false,
+  borderGradientSize: 70,
+  parcel: "safe"
+};
+
+interface ListItemContainerProps {
+  index: number;
+}
+const ListItemContainer = (props: PropsWithChildren<ListItemContainerProps>) => (
+  <RevealEffect config={listItemEffectConfig}
+    component={motion.div}
+    initial={{ y: 30, opacity: 0 }}
+    whileInView={{ y: 0, opacity: 1 }}
+    viewport={{ margin: "-100px" }}
+  >
+    <ListItem sx={{ backgroundColor: "#282c34" }}>{props.children}</ListItem>
+  </RevealEffect>
+)
+
+interface RevealEffectConfig extends RevealEffectStylesType {
+  borderWidth: number;
+  borderRadius: number;
+}
 const AdjustableDemo = () => {
-  const [config, setConfig] = useState({
+  const rootRef = useRef<HTMLDivElement|null>(null);
+
+  const [config, setConfig] = useState<RevealEffectConfig>({
     clickEffect: true,
     clickEffectColor: "rgba(255, 255, 255, 0.2)",
     effectBackground: true,
     effectBorder: true,
     borderRadius: 8,
     borderWidth: 1,
+    borderColor: "#ffffff",
+    lightColor: "#164cdc",
+    parcel: "safe"
   })
   const handleSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name as keyof typeof config;
@@ -30,85 +64,105 @@ const AdjustableDemo = () => {
     })
   }
 
-  const listItemEffectConfig = useMemo(() => ({
-    clickEffect: false,
-    effectBackground: false,
-    borderGradientSize: 70
-  }), []);
+  const handleLightColorChange = (color: ColorResult) => { handleColorChange(color, "lightColor") }
+  const handleBorderColorChange = (color: ColorResult) => { handleColorChange(color, "borderColor") }
+  const handleColorChange = (color: ColorResult, name: keyof typeof config) => {
+    setConfig(pre => ({ ...pre, [name]: color.hex }))
+  }
 
   return (
-    <Grid container component="main"
-      justifyContent="center"
-      alignItems="center"
+    <Container
       sx={{
-        padding: "10vh 0",
-        textAlign: "center",
+        maxWidth: 1200,
+        padding: "6vh 0",
       }}
     >
-      <List sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        width: 400,
-        height: "100%",
-        color: "#fff",
-        padding: "20px 0",
-        boxSizing: "border-box"
-      }}>
-        <RevealEffect config={listItemEffectConfig}>
-          <ListItem sx={{ backgroundColor: "#282c34" }}>
+      <Typography variant="h4" color="#fff"
+        sx={(theme) => ({
+          mb: "2vh",
+          fontWeight: 500,
+          [theme.breakpoints.down("md")]: {
+            textAlign: "center"
+          }
+        })}
+      >Try it</Typography>
+      <Grid container
+        justifyContent="center"
+        alignItems="center"
+        flexWrap="wrap"
+        sx={{
+          textAlign: "center"
+        }}
+        ref={rootRef}
+      >
+        <List sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          width: 560,
+          height: "100%",
+          color: "#fff",
+          padding: "20px 0",
+          boxSizing: "border-box"
+        }}>
+          <ListItemContainer index={0}>
             <ListItemText primary="Click Effect"/>
             <Switch edge="end" name="clickEffect" checked={config.clickEffect} onChange={handleSwitchChange}/>
-          </ListItem>
-        </RevealEffect>
-        <RevealEffect config={listItemEffectConfig}>
-          <ListItem sx={{ backgroundColor: "#282c34" }}>
-            <ListItemText primary="Background Effect"/>
+          </ListItemContainer>
+          <ListItemContainer index={1}>
+            <ListItemText primary="Light Effect"/>
             <Switch edge="end" name="effectBackground" checked={config.effectBackground} onChange={handleSwitchChange}/>
-          </ListItem>
-        </RevealEffect>
-        <RevealEffect config={listItemEffectConfig}>
-          <ListItem sx={{ backgroundColor: "#282c34" }}>
+          </ListItemContainer>
+          <ListItemContainer index={2}>
             <ListItemText primary="Border Effect"/>
             <Switch edge="end" name="effectBorder" checked={config.effectBorder} onChange={handleSwitchChange}/>
-          </ListItem>
-        </RevealEffect>
-        <RevealEffect config={listItemEffectConfig}>
-          <ListItem sx={{ backgroundColor: "#282c34" }}>
+          </ListItemContainer>
+          <ListItemContainer index={3}>
             <ListItemText primary="Border Radius"/>
             <Slider size="small" name="borderRadius"
               sx={{width: "50%"}}
               max={30} valueLabelDisplay="auto"
               value={config.borderRadius} onChange={(_, newValue) => handleSliderChange("borderRadius", newValue)}
             />
-          </ListItem>
-        </RevealEffect>
-        <RevealEffect config={listItemEffectConfig}>
-          <ListItem sx={{ backgroundColor: "#282c34" }}>
+          </ListItemContainer>
+          <ListItemContainer index={4}>
             <ListItemText primary="Border Width"/>
             <Slider size="small" name="borderWidth"
               sx={{width: "50%"}}
               max={10} valueLabelDisplay="auto"
               value={config.borderWidth} onChange={(_, newValue) => handleSliderChange("borderWidth", newValue)}
             />
-          </ListItem>
-        </RevealEffect>
-      </List>
+          </ListItemContainer>
+          <ListItemContainer index={4}>
+            <ListItemText primary="Border Color"/>
+            <ColorPicker color={config.borderColor} onChangeComplete={handleBorderColorChange} />
+          </ListItemContainer>
+          <ListItemContainer index={4}>
+            <ListItemText primary="Light Color"/>
+            <ColorPicker color={config.lightColor} onChangeComplete={handleLightColorChange} />
+          </ListItemContainer>
+        </List>
 
-      <Grid container justifyContent="center" alignItems="center" sx={{flex: 0.6}}>
-        <RevealEffect config={{...config}}>
-          <Box component="button"
-            sx={{
-              width: "100px",
-              height: "100px",
-              fontSize: "18px",
-              color: "#fff",
-              backgroundColor: "#282c34",
-            }}
-          >Demo</Box>
-        </RevealEffect>
+        <Grid item justifyContent="center" alignItems="center"
+          sx={{flex: 1, minWidth: 320}}
+        >
+          <RevealEffect config={config}
+            component={motion.div} initial={{ opacity: 0, y: "100%" }} whileInView={{ opacity: 1, y: 0 }} viewport={{ margin: "-100px" }}
+          >
+            <Box component="button"
+              sx={{
+                width: "100px",
+                height: "100px",
+                fontSize: "18px",
+                color: "#fff",
+                backgroundColor: "#282c34",
+              }}
+            >Demo</Box>
+          </RevealEffect>
+        </Grid>
       </Grid>
-    </Grid>
+
+    </Container>
   );
 }
 

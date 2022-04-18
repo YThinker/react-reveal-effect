@@ -14,7 +14,7 @@
 
 &nbsp;
 
-## Demo
+## Demo & Docs
 🔗 https://ythinker.github.io/react-reveal-effect
 
 &nbsp;
@@ -131,7 +131,7 @@ Component Options(extend from EffectOptionsType)
 | borderStyle       | border element style                                                                                                                                                                                                                                                            | string                             |
 | className         | container className                                                                                                                                                                                                                                                             | string                             |
 | borderClassName   | border element className                                                                                                                                                                                                                                                        | string                             |
-| borderRef         | border element ref                                                                                                                                                                                                                                                              | MutableRefObject\<HTMLDivElement\> |
+| borderRef         | border element ref                                                                                                                                                                                                                                                              | MutableRefObject\<HTMLElement\> |
 | parcel            | parcel type<br/>"parcel": might break layout<br/>"shrink": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative" | "parcel"\|"shrink"\|"safe"         | "safe"  |
 
 &nbsp;
@@ -154,6 +154,9 @@ MIT
 &nbsp;
 
 ## Changelog
+### v2.0.1
+update RevealEffect component type, support type derivation.
+fix lightColor state change
 ### v2.0.0
 Update: \
 useRevealEffect accept MutableRefObject\<HTMLElement\>\
@@ -173,7 +176,7 @@ Added a new option for RevealEffect component(parcel: "shrink").\
 ClickEffect won't be affected by EffectBackground.
 
 ## Iteration Planning
-1. RevealEffect非入侵模式开发（不污染子元素的background-image）
+1. RevealEffect非入侵模式开发（不污染子元素的background-image,仅支持ie11）
 2. useRevealEffect返回信息更加详细
 3. 大量dom页面性能测试
 4. 单元测试补齐
