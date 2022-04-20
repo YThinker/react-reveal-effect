@@ -7,7 +7,7 @@ import Compatibility from './components/StartNow';
 import Principle from './components/Principle';
 
 
-export default () => {
+const Home = () => {
 
   return (
     <>
@@ -25,3 +25,5 @@ export default () => {
     </>
   )
 };
+
+export default Home;

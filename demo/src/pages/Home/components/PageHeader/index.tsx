@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useRevealEffect } from "../../../../RevealEffect";
 
-import { Box, Link, Typography, Skeleton, styled, Button, Card, Grid, Container } from "@mui/material";
+import { Box, Link, Typography, Skeleton, styled, Button, Grid, Container } from "@mui/material";
 import { ArrowRight, ContentCopy, Done } from '@mui/icons-material';
 import copy from "copy-to-clipboard";
 

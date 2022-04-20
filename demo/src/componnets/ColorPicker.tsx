@@ -1,6 +1,6 @@
 import { Button, Popover } from '@mui/material';
-import React, { MouseEvent, useState } from 'react'
-import { ChromePicker, Color, ColorChangeHandler, ColorResult } from "react-color";
+import { MouseEvent, useState } from 'react'
+import { ChromePicker, Color, ColorChangeHandler } from "react-color";
 
 
 interface ColorPickerProps {
@@ -8,7 +8,7 @@ interface ColorPickerProps {
   onChange?: ColorChangeHandler | undefined,
   onChangeComplete?: ColorChangeHandler | undefined
 }
-export default (props: ColorPickerProps) => {
+const ColorPicker = (props: ColorPickerProps) => {
   const { color, onChange, onChangeComplete } = props;
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement|null>(null);
@@ -45,3 +45,5 @@ export default (props: ColorPickerProps) => {
 
   )
 }
+
+export default ColorPicker;

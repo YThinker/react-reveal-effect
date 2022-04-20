@@ -1,6 +1,6 @@
 import { Inventory2TwoTone, FlashOnTwoTone, WebTwoTone, BuildCircleTwoTone} from '@mui/icons-material';
 import IntroduceCard from "./IntroduceCard";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { useRef } from "react";
 import SectionTitle from '../../../../componnets/SectionTitle';
 
@@ -22,7 +22,7 @@ const introduceCardList = [{
   content: "Provide hook api or component, combine freely"
 }, ];
 
-export default () => {
+const Introduce = () => {
   const rootRef = useRef<HTMLDivElement|null>(null);
 
   return (
@@ -64,3 +64,5 @@ export default () => {
 
   )
 }
+
+export default Introduce;

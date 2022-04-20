@@ -1,6 +1,6 @@
 import { Box, Container, Grid, List, ListItem, ListItemText, Slider, Switch, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import { ChangeEvent, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { ChangeEvent, PropsWithChildren, useRef, useState } from "react";
 import { ColorResult } from "react-color";
 import ColorPicker from "../../../../componnets/ColorPicker";
 import { RevealEffect } from "../../../../RevealEffect";

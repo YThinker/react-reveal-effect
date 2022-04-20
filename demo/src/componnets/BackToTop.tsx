@@ -16,7 +16,7 @@ const BackToTop = () => {
     } else {
       setFabVisible(false);
     }
-  }), []);
+  }), [scrollY]);
 
   const triggerToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })

@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { useState } from "react";
 import SectionTitle from "../../../../componnets/SectionTitle";
 import { CustomTab, CustomTabs } from "./CustomTabs";

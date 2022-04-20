@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Link, Box, Theme, styled, Container } from "@mui/material"
+import { AppBar, Link, Box, Theme, styled, Container } from "@mui/material"
 
 import logo from "../img/logo.svg";
 
@@ -10,7 +10,7 @@ const LinkStyles = {
   marginLeft: (theme: Theme) => theme.spacing(2)
 }
 
-export default () => {
+const CustomAppBar = () => {
 
   return (
     <AppBar position="fixed" sx={{
@@ -36,3 +36,5 @@ export default () => {
     </AppBar>
   )
 }
+
+export default CustomAppBar;

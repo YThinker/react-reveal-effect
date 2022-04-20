@@ -4,7 +4,6 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 import dracula from 'prism-react-renderer/themes/dracula';
 import { useMemo } from "react";
 import { TabLabel } from ".";
-import { RevealEffect } from "../../../../RevealEffect";
 import { hookCode, componentCode } from "./constance";
 
 

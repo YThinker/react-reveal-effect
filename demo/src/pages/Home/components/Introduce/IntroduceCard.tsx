@@ -28,7 +28,7 @@ const MuiMotionDiv = styled(motion.div)(({ theme }) => {
   }
 });
 const IntroduceCard = (props: IntroduceCardProps) => {
-  const { icon, title, content, rootRef } = props;
+  const { icon, title, content } = props;
 
   return (
     <RevealEffect
