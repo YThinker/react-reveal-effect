@@ -125,7 +125,6 @@ export interface InitObjectType {
 type PracelType = "parcel" | "shrink" | "safe";
 export interface RevealEffectStylesType extends EffectOptionsType {
   borderWidth?: string | number,
-  borderRadius?: string | number,
 
   /**
    * 是否使用非入侵式包裹光效

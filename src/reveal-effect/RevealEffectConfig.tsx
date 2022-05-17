@@ -42,23 +42,24 @@ export const RevealEffectConfig = forwardRef((props, ref) => {
     setPosition({pageX: null, pageY: null});
   }, [])
   useEffect(() => {
+    const mountElementNode = mountElement.current;
     if(mountOnBody) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseleave", handleMouseLeave);
     } else {
-      mountElement.current?.addEventListener("mousemove", handleMouseMove);
-      mountElement.current?.addEventListener("mouseleave", handleMouseLeave);
+      mountElementNode?.addEventListener("mousemove", handleMouseMove);
+      mountElementNode?.addEventListener("mouseleave", handleMouseLeave);
     }
     return () => {
       if(mountOnBody) {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseleave", handleMouseLeave);
       } else {
-        mountElement.current?.removeEventListener("mousemove", handleMouseMove);
-        mountElement.current?.removeEventListener("mouseleave", handleMouseLeave);
+        mountElementNode?.removeEventListener("mousemove", handleMouseMove);
+        mountElementNode?.removeEventListener("mouseleave", handleMouseLeave);
       }
     }
-  }, [handleMouseMove])
+  }, [mountOnBody, Tag])
 
   let config = globalConfig;
   if(userConfig){
