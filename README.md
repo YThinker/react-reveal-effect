@@ -126,7 +126,7 @@ Component Options(extend from EffectOptionsType)
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------- |
 | ...global options |                                                                                                                                                                                                                                                                                 | EffectOptionsType                  |
 | borderWidth       | border effect line width                                                                                                                                                                                                                                                        | string \| number                             |
-| borderRadius      | border effect radius                                                                                                                                                                                                                                                            | string \| number                             |
+| <del>borderRadius</del>      | border effect radius                                                                                                                                                                                                                                                            | string \| number                             |
 | style             | container style                                                                                                                                                                                                                                                                 | string                             |
 | borderStyle       | border element style                                                                                                                                                                                                                                                            | string                             |
 | className         | container className                                                                                                                                                                                                                                                             | string                             |
@@ -154,6 +154,9 @@ MIT
 &nbsp;
 
 ## Changelog
+### v2.0.2
+\<RevealEffect\> component's config borderRadius has been removed, which can be computed automatically.
+tips: unable to listen for borderRadius style changes, if you has such a need you can use className or style property.
 ### v2.0.1
 update RevealEffect component type, support type derivation.
 fix lightColor state change

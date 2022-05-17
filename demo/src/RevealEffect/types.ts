@@ -79,18 +79,11 @@ export interface GlobalEffectConfigType {
   effectBorder: boolean,
   effectBackground: boolean,
 }
-export interface EffectOptionsType {
-  borderColor?: string,
-  lightColor?: string,
-  clickEffectColor?: string,
-  clickEffect?: boolean,
-  borderGradientSize?: number,
-  lightGradientSize?: number,
-  clickEffectGradientSize?: number,
-  effectBorder?: boolean,
-  effectBackground?: boolean,
-}
 
+type CustomPartial<T> = {
+  [K in keyof T]?: T[K] | undefined;
+}
+export interface EffectOptionsType extends CustomPartial<GlobalEffectConfigType> {}
 
 
 export interface ConfigComponentProps<B extends boolean> {
@@ -103,7 +96,7 @@ export interface ConfigComponentTypeMap<B extends boolean = true, D extends Elem
   defaultComponent: D;
 }
 
-export type EffectElement = HTMLElement | (() => HTMLElement) | Element | null;
+export type EffectElement = (() => Element) | Element | null | undefined;
 export type EffectElementRef = MutableRefObject<HTMLElement | null>;
 export type EffectElements = EffectElement[];
 export type EffectElementRefs = Array<MutableRefObject<HTMLElement | null>>;
@@ -141,7 +134,7 @@ export interface RevealEffectStylesType extends EffectOptionsType {
    * @description "safe" 不对布局产生影响，也不更改使用光效的元素，通过插入一个absolute元素的方式添加边框光效（可能会被overflow遮挡）
    * @default "safe"
    */
-  parcel?: "parcel" | "shrink" | "safe",
+  parcel?: PracelType,
 }
 
 export interface RevealEffectComponentProps {

@@ -36,8 +36,8 @@ const IntroduceCard = (props: IntroduceCardProps) => {
         parcel: "safe",
         clickEffect: false,
         effectBackground: false,
-        borderRadius: 16
       }}
+      borderStyle={{ borderRadius: "16px" }}
       component={MuiMotionDiv}
       initial={{ scale: 0 }}
       whileInView={{ scale: 1 }}
@@ -47,6 +47,7 @@ const IntroduceCard = (props: IntroduceCardProps) => {
         sx={{
           width: "100%",
           height: "100%",
+          borderRadius: "16px"
         }}
       >
         <CardHeader

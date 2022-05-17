@@ -30,7 +30,6 @@ const ListItemContainer = (props: PropsWithChildren<ListItemContainerProps>) => 
 
 interface RevealEffectConfig extends RevealEffectStylesType {
   borderWidth: number;
-  borderRadius: number;
 }
 const AdjustableDemo = () => {
   const rootRef = useRef<HTMLDivElement|null>(null);
@@ -40,7 +39,6 @@ const AdjustableDemo = () => {
     clickEffectColor: "rgba(255, 255, 255, 0.2)",
     effectBackground: true,
     effectBorder: true,
-    borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ffffff",
     lightColor: "#164cdc",
@@ -116,14 +114,6 @@ const AdjustableDemo = () => {
           <ListItemContainer index={2}>
             <ListItemText primary="Border Effect"/>
             <Switch edge="end" name="effectBorder" checked={config.effectBorder} onChange={handleSwitchChange}/>
-          </ListItemContainer>
-          <ListItemContainer index={3}>
-            <ListItemText primary="Border Radius"/>
-            <Slider size="small" name="borderRadius"
-              sx={{width: "50%"}}
-              max={30} valueLabelDisplay="auto"
-              value={config.borderRadius} onChange={(_, newValue) => handleSliderChange("borderRadius", newValue)}
-            />
           </ListItemContainer>
           <ListItemContainer index={4}>
             <ListItemText primary="Border Width"/>

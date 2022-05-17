@@ -23,8 +23,7 @@ export const RevealEffect = forwardRef((props, ref) => {
   const child = Children.only(children)
 
   // handle border style props
-  const { borderRadius:radius, borderWidth:width = "1px", parcel, ...options } = config || {};
-  const borderRadius = typeof radius === "number" ? `${radius}px` : radius;
+  const { borderWidth:width = "1px", parcel = "parcel", ...options } = config || {};
   const borderWidth = typeof width === "number" ? `${width}px` : width;
 
   // dom ref & expose ref
@@ -49,20 +48,19 @@ export const RevealEffect = forwardRef((props, ref) => {
       setShrinkStyles({
         border: {
           display: "inline-block",
-          borderRadius,
-          padding: borderWidth,
           width: styles.current.width,
           height: styles.current.height,
-          boxSizing: "border-box"
+          boxSizing: "border-box",
+          padding: borderWidth,
+          borderRadius: styles.current?.borderRadius
         },
         element: {
-          borderRadius,
           width: `calc(${styles.current.width} - ${borderWidth} - ${borderWidth})`,
           height: `calc(${styles.current.height} - ${borderWidth} - ${borderWidth})`
         }
       })
     }
-  }, [borderWidth, borderRadius, parcel])
+  }, [borderWidth, parcel])
 
   // use reveal effect
   useRevealEffect({
@@ -73,13 +71,13 @@ export const RevealEffect = forwardRef((props, ref) => {
   if(parcel === "parcel"){
     return (
       <Tag ref={forkContainerRef}
-        style={{display: "inline-block", borderRadius, padding: borderWidth, ...style }}
+        style={{display: "inline-block", padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
         className={className}
         {...restProps}
       >
         {cloneElement(
           child,
-          {style: {borderRadius}, ref: insiderElementRef},
+          {ref: insiderElementRef},
         )}
       </Tag>
     );
@@ -96,22 +94,22 @@ export const RevealEffect = forwardRef((props, ref) => {
         )}
       </Tag>
     );
-  } else {
+  } else if(parcel === "safe"){
     return (
       <Tag ref={ref}
-        style={{display: "inline-block", position: "relative", ...style}}
+        style={{position: "relative", display: "inline-block", borderRadius: styles.current?.borderRadius, ...style}}
         className={className}
         {...restProps}
       >
         <span ref={forkBorderRef}
           style={{
-            display: "block",
             position: "absolute",
-            width: `calc(100% + ${borderWidth} + ${borderWidth})`,
-            height: `calc(100% + ${borderWidth} + ${borderWidth})`,
             top: `-${borderWidth}`,
             left: `-${borderWidth}`,
-            borderRadius,
+            display: "block",
+            width: `calc(100% + ${borderWidth} + ${borderWidth})`,
+            height: `calc(100% + ${borderWidth} + ${borderWidth})`,
+            borderRadius: styles.current?.borderRadius,
             zIndex: 1,
             ...borderStyle
           }}
@@ -119,9 +117,11 @@ export const RevealEffect = forwardRef((props, ref) => {
         ></span>
         {cloneElement(
           child,
-          {style: {borderRadius, position: "relative", zIndex: 1}, ref: insiderElementRef},
+          {style: {position: "relative", zIndex: 1}, ref: insiderElementRef},
         )}
       </Tag>
     );
+  } else {
+    return child;
   }
 }) as OverridableComponent<RevealEffectComponentTypeMap>

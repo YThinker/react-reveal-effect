@@ -73,7 +73,6 @@ const Logo = () => {
   return (
     <RevealEffect
       config={
-        borderRadius: 16,
         effectBackground: false,
         borderColor: "rgba(255, 255, 255, 0.4)"
       }
