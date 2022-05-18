@@ -131,7 +131,7 @@ export interface RevealEffectStylesType extends EffectOptionsType {
    * @description "parcel" 使用对布局有影响的光效包裹元素，包裹使用光效的元素的父元素会有一段溢出的宽高
    * @description "shrink" 破坏性更改使用光效的元素，缩放使用光效的元素的宽高
    * @description "safe" 不对布局产生影响，也不更改使用光效的元素，通过插入一个absolute元素的方式添加边框光效（可能会被overflow遮挡）
-   * @default "safe"
+   * @default "parcel"
    */
   parcel?: PracelType,
 }
@@ -142,22 +142,12 @@ export interface RevealEffectComponentProps {
   children: ReactElement<HTMLElement>;
 
   /**
-   * @description container style
-   */
-  // style?: CSSProperties | undefined;
-
-  /**
-   * @description container className
-   */
-  // className?: string | undefined;
-
-  /**
    * @description (It works only when parcel = "shrink") border style
    */
   borderStyle?: CSSProperties | undefined;
 
   /**
-   * @description (It works only when parcel = "shrink") border style
+   * @description (It works only when parcel = "shrink") border className
    */
   borderClassName?: string | undefined;
 

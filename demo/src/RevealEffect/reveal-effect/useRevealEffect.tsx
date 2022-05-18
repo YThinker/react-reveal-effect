@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { applyEffect } from "./applyEffect";
+import applyEffect from "./utils/applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
 import { ApplyEffectInfoType, EffectElementRef, EffectElementRefs, EffectOptionsType, InitObjectType } from "./types";
 
-export const useRevealEffect = (
+const useRevealEffect = (
   selector: {
     borderSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
     elementSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
@@ -105,3 +105,5 @@ const handleSelectors = (selector: EffectElementRefs | HTMLElement[]) => {
     return handleSelector(item);
   }).filter(item => Boolean(item)) as HTMLElement[]|[];
 }
+
+export default useRevealEffect;

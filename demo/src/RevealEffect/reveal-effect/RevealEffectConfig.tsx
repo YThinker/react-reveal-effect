@@ -20,7 +20,7 @@ const globalConfig = {
 }
 export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
 
-export const RevealEffectConfig = forwardRef((props, ref) => {
+const RevealEffectConfig = forwardRef((props, ref) => {
 
   const {
     mountOnBody = true,
@@ -79,3 +79,5 @@ export const RevealEffectConfig = forwardRef((props, ref) => {
     </MousePosition.Provider>
   );
 }) as OverridableComponent<ConfigComponentTypeMap<true, never>|ConfigComponentTypeMap<false>>
+
+export default RevealEffectConfig;

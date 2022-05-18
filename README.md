@@ -132,7 +132,7 @@ Component Options(extend from EffectOptionsType)
 | className         | container className                                                                                                                                                                                                                                                             | string                             |
 | borderClassName   | border element className                                                                                                                                                                                                                                                        | string                             |
 | borderRef         | border element ref                                                                                                                                                                                                                                                              | MutableRefObject\<HTMLElement\> |
-| parcel            | parcel type<br/>"parcel": might break layout<br/>"shrink": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative" | "parcel"\|"shrink"\|"safe"         | "safe"  |
+| parcel            | parcel type<br/>"parcel": might break layout<br/>"shrink": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative" | "parcel"\|"shrink"\|"safe"         | "parcel"  |
 
 &nbsp;
 
@@ -154,6 +154,8 @@ MIT
 &nbsp;
 
 ## Changelog
+### v2.0.3
+Optimize project structure
 ### v2.0.2
 \<RevealEffect\> component's config borderRadius has been removed, which can be computed automatically.
 tips: unable to listen for borderRadius style changes, if you has such a need you can use className or style property.

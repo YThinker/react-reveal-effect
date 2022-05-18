@@ -1,9 +1,9 @@
 import { MutableRefObject } from "react";
 import { drawEffect, getOffset, getPreProcessElements, handleRemove, isIntersected } from "./helpers";
 
-import { ApplyEffectInfoType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "./types";
+import { ApplyEffectInfoType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "../types";
 
-export function applyEffect(
+export default function applyEffect(
   selector: HTMLElement | Array<HTMLElement>,
   isContainer: boolean,
   options: GlobalEffectConfigType,

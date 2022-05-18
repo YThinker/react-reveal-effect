@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { ChangeEvent, PropsWithChildren, useRef, useState } from "react";
 import { ColorResult } from "react-color";
 import ColorPicker from "../../../../componnets/ColorPicker";
+// import { RevealEffect } from "react-reveal-effect";
+// import { RevealEffectStylesType } from "react-reveal-effect/dist/types/reveal-effect/types";
 import { RevealEffect } from "../../../../RevealEffect";
-import { RevealEffectStylesType } from "../../../../RevealEffect/types";
+import { RevealEffectStylesType } from "../../../../RevealEffect";
 
 
 const listItemEffectConfig: RevealEffectStylesType = {
