@@ -157,7 +157,7 @@ MIT
 &nbsp;
 
 ## Changelog
-### v2.1.0
+### v3.0.0
 Fix: Compatible with React 18\
 Optimize: Change the attribute name to make it more uniform and semantic.\
 | old name                | new name            | new type                            |
