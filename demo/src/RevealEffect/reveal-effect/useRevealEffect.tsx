@@ -1,14 +1,14 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import applyEffect from "./utils/applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
-import { ApplyEffectInfoType, EffectElementRef, EffectElementRefs, EffectOptionsType, InitObjectType } from "./types";
+import { ApplyEffectInfoType, EffectElementRef, EffectElementRefs, EffectConfigType, InitObjectType } from "./types";
 
 const useRevealEffect = (
   selector: {
     borderSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
     elementSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
   },
-  options?: EffectOptionsType
+  config?: EffectConfigType
 ) => {
 
   const { pageX, pageY } = useContext(MousePosition);
@@ -19,26 +19,23 @@ const useRevealEffect = (
 
   const globalConfig = useContext(EffectConfig);
 
+  const assignConfig = useMemo(() => Object.assign({}, globalConfig, config), [globalConfig, config]);
+
   const initBorderObject = useRef<InitObjectType | undefined>();
   const initElementObject = useRef<InitObjectType | undefined>();
 
-  const [stopFlag, setStopFlag] = useState(false);
-  const handleStart = () => setStopFlag(false);
   const borderInfo = useRef<ApplyEffectInfoType | undefined>();
   const elementInfo = useRef<ApplyEffectInfoType | undefined>();
-  const handleStop = () => {
+  const handleAfterStop = () => {
     borderInfo.current?.removeEffect();
     elementInfo.current?.removeEffect();
-
-    setStopFlag(true);
   }
 
   useEffect(() => {
-    if(pageX === null || pageY === null) {
-      borderInfo.current?.removeEffect();
-      elementInfo.current?.removeEffect();
+    if(pageX === null || pageY === null || assignConfig.stop) {
+      handleAfterStop();
     }
-  }, [pageX, pageY])
+  }, [pageX, pageY, assignConfig])
 
   const draw = (
     selector: HTMLElement | HTMLElement[],
@@ -46,14 +43,14 @@ const useRevealEffect = (
   ) => applyEffect(
     selector,
     Boolean(isContainer),
-    Object.assign({}, globalConfig, options),
+    assignConfig,
     pageX,
     pageY,
     Boolean(isContainer) ? initBorderObject : initElementObject
   )
 
   useEffect(() => {
-    if(!stopFlag){
+    if(!assignConfig.stop){
       let borderSelector = null;
       let elementSelector = null;
       if(selector.borderSelector instanceof Array){
@@ -76,19 +73,15 @@ const useRevealEffect = (
     }
   }, [
     selector?.borderSelector, selector?.elementSelector,
-    stopFlag,
     pageX, pageY,
     initBorderObject,
     initElementObject,
-    options, globalConfig
+    assignConfig
   ])
-  useEffect(() => handleStop, []);
 
   return {
     borderInfo: borderInfo.current,
-    elementInfo: elementInfo.current,
-    running: !stopFlag,
-    triggerRun: stopFlag ? handleStart : handleStop
+    elementInfo: elementInfo.current
   };
 }
 

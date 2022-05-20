@@ -33,17 +33,19 @@
 \
 Parent.ts
 ```tsx
+import { Container } from "@mui/material";
 import { RevealEffectConfig } from 'react-reveal-effect';
 
-const Parent = () => {
+const Parent = ({ children }) => {
   return (
     <RevealEffectConfig
-      mountOnBody={true}
+      mountOnBody={false}
+      component={Container}
       config={{
         borderColose: "#fff"
       }}
     >
-      ...
+      {children}
     </RevealEffectConfig>
   )
 }
@@ -83,7 +85,7 @@ const Child = () => {
 
   return (
     <RevealEffect component="span" config={{
-      effectBorder: false
+      borderEffect: false
     }}>
       <button>Demo</button>
     </RevealEffect>
@@ -91,48 +93,49 @@ const Child = () => {
 }
 ```
 
-## Options
+## Config
 ⚙
-### Global Options(Type: EffectOptionsType)
-| Options Property        | Description         | Type                             | Default                   |
-| ----------------------- | ------------------- | -------------------------------- | ------------------------- |
-| borderColor             | border effect color | borderColor?: string             | rgba(255, 255, 255, 0.25) |
-| lightColor              | hover effect color  | lightColor?: string              | rgba(255, 255, 255, 0.25) |
-| clickEffectColor        | click effect color  | clickEffectColor?: string        | rgba(255, 255, 255, 0.25) |
-| clickEffect             | take click effect   | clickEffect?: string             | false                     |
-| borderGradientSize      | border effect size  | borderGradientSize?: number      | 150                       |
-| lightGradientSize       | hover effect size   | lightGradientSize?: number       | 150                       |
-| clickEffectGradientSize | click effect size   | clickEffectGradientSize?: number | 80                        |
-| effectBorder            | take border effect  | effectBorder?: boolean           | true                      |
-| effectBackground        | take hover effect   | effectBackground?: boolean       | true                      |
+### Global Config(Type: EffectConfigType)
+| Config Property     | Description         | Type                         | Default                   |
+| ------------------- | ------------------- | ---------------------------- | ------------------------- |
+| borderColor         | border effect color | borderColor?: string         | rgba(255, 255, 255, 0.25) |
+| elementColor        | hover effect color  | elementColor?: string        | rgba(255, 255, 255, 0.25) |
+| clickColor          | click effect color  | clickColor?: string          | rgba(255, 255, 255, 0.25) |
+| clickEffect         | take click effect   | clickEffect?: string         | false                     |
+| borderGradientSize  | border effect size  | borderGradientSize?: number  | 150                       |
+| elementGradientSize | hover effect size   | elementGradientSize?: number | 150                       |
+| clickGradientSize   | click effect size   | clickGradientSize?: number   | 80                        |
+| borderEffect        | take border effect  | borderEffect?: boolean       | true                      |
+| elementEffect       | take hover effect   | elementEffect?: boolean      | true                      |
+| stop                | stop drawer effect  | stop?: boolean               | false                     |
 
 ### Hooks
 Parameter
-| Params   | Description                 | Type                                                                                                                              |
-| -------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Params    | Description                 | Type                                                                                                                                                               |
+| --------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | selectors | draw effect on the selector | {<br/>&nbsp;&nbsp;borderSelector?: MutableRefObject\<HTMLElement\>\|HTMLElement\|HTMLElement[], <br/>&nbsp;&nbsp;elementSelector: HTMLElement\|HTMLElement[]<br/>} |
-| options  | effect options              | EffectOptionsType                                                                                                                 |
+| config    | effect config               | EffectConfigType                                                                                                                                                   |
 
 
 ### Component
 Property
-| Props  | Description    | Type              | default |
-| ------ | -------------- | ----------------- |---------|
-| config | effect options | ComponentOptions |
-| component | The component used for the root node | elementType | div |
+| Props     | Description                          | Type            | default |
+| --------- | ------------------------------------ | --------------- | ------- |
+| config    | effect config                        | ComponentConfig |
+| component | The component used for the root node | elementType     | div     |
 
-Component Options(extend from EffectOptionsType)
-| Options Property  | Description                                                                                                                                                                                                                                                                     | Type                               | Default |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------- |
-| ...global options |                                                                                                                                                                                                                                                                                 | EffectOptionsType                  |
-| borderWidth       | border effect line width                                                                                                                                                                                                                                                        | string \| number                             |
-| <del>borderRadius</del>      | border effect radius                                                                                                                                                                                                                                                            | string \| number                             |
-| style             | container style                                                                                                                                                                                                                                                                 | string                             |
-| borderStyle       | border element style                                                                                                                                                                                                                                                            | string                             |
-| className         | container className                                                                                                                                                                                                                                                             | string                             |
-| borderClassName   | border element className                                                                                                                                                                                                                                                        | string                             |
-| borderRef         | border element ref                                                                                                                                                                                                                                                              | MutableRefObject\<HTMLElement\> |
-| parcel            | parcel type<br/>"parcel": might break layout<br/>"shrink": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative" | "parcel"\|"shrink"\|"safe"         | "parcel"  |
+Component Config(extend from EffectConfigType)
+| Config Property         | Description                                                                                                                                                                                                                                                                                       | Type                                | Default       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ------------- |
+| ...global config        |                                                                                                                                                                                                                                                                                                   | EffectConfigType                    |
+| borderWidth             | border effect line width                                                                                                                                                                                                                                                                          | string \| number                    |
+| <del>borderRadius</del> | border effect radius                                                                                                                                                                                                                                                                              | string \| number                    |
+| style                   | container style                                                                                                                                                                                                                                                                                   | string                              |
+| borderStyle             | border element style                                                                                                                                                                                                                                                                              | string                              |
+| className               | container className                                                                                                                                                                                                                                                                               | string                              |
+| borderClassName         | border element className                                                                                                                                                                                                                                                                          | string                              |
+| borderRef               | border element ref                                                                                                                                                                                                                                                                                | MutableRefObject\<HTMLElement\>     |
+| effectBoxSizing         | effectBoxSizing type<br/>"content-box": might break layout<br/>"border-box": It works by shrink the child element which may cause the child element to be clipped<br/>"safe":border effect might be obscured by "overflow: hidden" and "RevealEffect" component's position property is "relative" | "content-box"\|"border-box"\|"safe" | "content-box" |
 
 &nbsp;
 
@@ -147,13 +150,28 @@ MIT
 &nbsp;
 
 ## Q&A
-### Define borderStyle|borderClassName|borderRef when Parcel is not "shrink"
-&nbsp;&nbsp;&nbsp;&nbsp;If you have defined borderStyle|borderClassName|borderRef When RevealEffect component's options Parcel is not "shrink", they will take effect on the container element because if Parcel is not "shrink",the border effect will be added on the container element.
+### Define borderStyle|borderClassName|borderRef when RevealEffect's config effectBoxSizing is not "shrink"
+&nbsp;&nbsp;&nbsp;&nbsp;If you have defined borderStyle|borderClassName|borderRef When RevealEffect component's config effectBoxSizing is not "border-box", they will take effect on the container element because in this case border effect will be added on the container element.
 
 
 &nbsp;
 
 ## Changelog
+### v2.1.0
+Fix: Compatible with React 18\
+Optimize: Change the attribute name to make it more uniform and semantic.\
+| old name                | new name            | new type                            |
+| ----------------------- | ------------------- | ----------------------------------- |
+| lightColor              | elementColor        |                                     |
+| clickEffectColor        | clickColor          |                                     |
+| lightGradientSize       | elementGradientSize |                                     |
+| effectBorder            | borderEffect        |                                     |
+| effectBackground        | elementEffect       |                                     |
+| clickEffectGradientSize | clickGradientSize   |                                     |
+| parcel                  | effectBoxSizing     | "content-box"\|"border-box"\|"safe" |
+
+New: RevealEffectConfig add a new config property "stop", which has lower priority than useRevealEffect's stop property.\
+New: RevealEffectConfig add a new property "off", which can stop all effect and remove event listener. This property has higher priority.
 ### v2.0.3
 Optimize project structure
 ### v2.0.2

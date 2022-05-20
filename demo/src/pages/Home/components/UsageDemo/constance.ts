@@ -20,7 +20,7 @@ const imgStyles = {
 const Logo = () => {
 
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
-  const removeRevealEffect = useRevealEffect(
+  useRevealEffect(
     {borderSelector: logoContainerRef.current},
     {borderGradientSize: 200}
   );
@@ -65,10 +65,6 @@ const imgStyles = {
 const Logo = () => {
 
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
-  const removeRevealEffect = useRevealEffect(
-    {borderSelector: logoContainerRef.current},
-    {borderGradientSize: 200}
-  );
 
   return (
     <RevealEffect

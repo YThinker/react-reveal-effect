@@ -33,9 +33,9 @@ const IntroduceCard = (props: IntroduceCardProps) => {
   return (
     <RevealEffect
       config={{
-        parcel: "safe",
+        effectBoxSizing: "safe",
         clickEffect: false,
-        effectBackground: false,
+        elementEffect: false,
       }}
       borderStyle={{ borderRadius: "16px" }}
       component={MuiMotionDiv}

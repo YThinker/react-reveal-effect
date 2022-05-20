@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { createContext, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useForkRef from "./hooks/useForkRef";
 import { ConfigComponentTypeMap, GlobalEffectConfigType, OverridableComponent, PositionProps } from "./types";
 
@@ -8,15 +8,16 @@ export const MousePosition = createContext<PositionProps>({
 });
 
 const globalConfig = {
-  borderColor: "rgba(255, 255, 255, 0.6)",
-  lightColor: "rgba(255, 255, 255, 0.3)",
-  clickEffectColor: "rgba(255, 255, 255, 0.3)",
+  elementEffect: true,
+  borderEffect: true,
   clickEffect: false,
+  borderColor: "rgba(255, 255, 255, 0.6)",
+  elementColor: "rgba(255, 255, 255, 0.3)",
+  clickColor: "rgba(255, 255, 255, 0.3)",
   borderGradientSize: 150,
-  lightGradientSize: 150,
-  clickEffectGradientSize: 80,
-  effectBackground: true,
-  effectBorder: true,
+  elementGradientSize: 150,
+  clickGradientSize: 80,
+  stop: false,
 }
 export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
 
@@ -25,10 +26,18 @@ const RevealEffectConfig = forwardRef((props, ref) => {
   const {
     mountOnBody = true,
     component: Tag = "div",
+    off = false,
     children,
     config: userConfig,
     ...restProps
   } = props;
+
+  const config = useMemo(() => {
+    if(userConfig){
+      return {...globalConfig, ...userConfig};
+    }
+    return globalConfig;
+  }, [globalConfig, userConfig])
 
   const [position, setPosition] = useState<PositionProps>({pageX: null, pageY: null});
 
@@ -36,21 +45,24 @@ const RevealEffectConfig = forwardRef((props, ref) => {
   const forkRef = useForkRef(mountElement, ref)
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    setPosition(pre => ({...pre, pageX: e.pageX, pageY: e.pageY}))
+    setPosition({pageX: e.pageX, pageY: e.pageY})
   }, [])
   const handleMouseLeave = useCallback(() => {
     setPosition({pageX: null, pageY: null});
   }, [])
   useEffect(() => {
     const mountElementNode = mountElement.current;
-    if(mountOnBody) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseleave", handleMouseLeave);
-    } else {
-      mountElementNode?.addEventListener("mousemove", handleMouseMove);
-      mountElementNode?.addEventListener("mouseleave", handleMouseLeave);
+    if(!off){
+      if(mountOnBody) {
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseleave", handleMouseLeave);
+      } else {
+        mountElementNode?.addEventListener("mousemove", handleMouseMove);
+        mountElementNode?.addEventListener("mouseleave", handleMouseLeave);
+      }
     }
     return () => {
+      handleMouseLeave();
       if(mountOnBody) {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseleave", handleMouseLeave);
@@ -59,12 +71,8 @@ const RevealEffectConfig = forwardRef((props, ref) => {
         mountElementNode?.removeEventListener("mouseleave", handleMouseLeave);
       }
     }
-  }, [mountOnBody, Tag])
+  }, [mountOnBody, Tag, off])
 
-  let config = globalConfig;
-  if(userConfig){
-    config = {...globalConfig, ...userConfig};
-  }
   return (
     <MousePosition.Provider value={position}>
       <EffectConfig.Provider value={config}>

@@ -22,7 +22,7 @@ const RevealEffect = forwardRef((props, ref) => {
   const child = Children.only(children)
 
   // handle border style props
-  const { borderWidth:width = "1px", parcel = "parcel", ...options } = config || {};
+  const { borderWidth:width = "1px", effectBoxSizing = "content-box", ...restConfig } = config || {};
   const borderWidth = typeof width === "number" ? `${width}px` : width;
 
   // dom ref & expose ref
@@ -42,7 +42,7 @@ const RevealEffect = forwardRef((props, ref) => {
   // calc styles of shrink
   const styles = useRef<CSSStyleDeclaration|undefined>();
   useEffect(() => {
-    if(parcel === "shrink" && insiderElementRef.current) {
+    if(effectBoxSizing === "border-box" && insiderElementRef.current) {
       styles.current ?? (styles.current = {...window.getComputedStyle(insiderElementRef.current)});
       setShrinkStyles({
         border: {
@@ -59,15 +59,15 @@ const RevealEffect = forwardRef((props, ref) => {
         }
       })
     }
-  }, [borderWidth, parcel])
+  }, [borderWidth, effectBoxSizing])
 
   // use reveal effect
   useRevealEffect({
     borderSelector: insiderBorderRef,
     elementSelector: insiderElementRef
-  }, options);
+  }, restConfig);
 
-  if(parcel === "parcel"){
+  if(effectBoxSizing === "content-box"){
     return (
       <Tag ref={forkContainerRef}
         style={{display: "inline-block", padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
@@ -80,7 +80,7 @@ const RevealEffect = forwardRef((props, ref) => {
         )}
       </Tag>
     );
-  } else if(parcel === "shrink"){
+  } else if(effectBoxSizing === "border-box"){
     return (
       <Tag ref={forkContainerRef}
         style={{ ...shrinkStyles.border, ...style}}
@@ -93,7 +93,7 @@ const RevealEffect = forwardRef((props, ref) => {
         )}
       </Tag>
     );
-  } else if(parcel === "safe"){
+  } else if(effectBoxSizing === "safe"){
     return (
       <Tag ref={ref}
         style={{position: "relative", display: "inline-block", borderRadius: styles.current?.borderRadius, ...style}}

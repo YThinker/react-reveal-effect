@@ -27,10 +27,14 @@ const marginBottom = "max(5vh, 30px)"
 
 const PageHeader = () => {
 
+  const [stopFlag, setStopFlag] = useState(false);
   const logoContainerRef = useRef<HTMLDivElement|null>(null);
-  const removeRevealEffect = useRevealEffect(
+  useRevealEffect(
     {borderSelector: logoContainerRef.current},
-    {borderGradientSize: 200}
+    {
+      borderGradientSize: 200,
+      stop: stopFlag
+    }
   );
 
   const [imgReady, setImgReady] = useState(false);
@@ -70,7 +74,7 @@ const PageHeader = () => {
         textAlign: "center"
       }}
     >
-      <Box ref={logoContainerRef} onClick={removeRevealEffect.triggerRun} sx={{
+      <Box ref={logoContainerRef} onClick={() => setStopFlag(!stopFlag)} sx={{
         minWidth: "20vmin",
         minHeight: "20vmin",
         marginBottom,

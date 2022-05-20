@@ -8,9 +8,9 @@ import { RevealEffect, RevealEffectStylesType } from "../../../../RevealEffect";
 
 const listItemEffectConfig: RevealEffectStylesType = {
   clickEffect: false,
-  effectBackground: false,
+  elementEffect: false,
   borderGradientSize: 70,
-  parcel: "safe"
+  effectBoxSizing: "safe"
 };
 
 interface ListItemContainerProps {
@@ -35,13 +35,13 @@ const AdjustableDemo = () => {
 
   const [config, setConfig] = useState<RevealEffectConfig>({
     clickEffect: true,
-    clickEffectColor: "rgba(255, 255, 255, 0.2)",
-    effectBackground: true,
-    effectBorder: true,
+    clickColor: "rgba(255, 255, 255, 0.2)",
+    elementEffect: true,
+    borderEffect: true,
     borderWidth: 1,
     borderColor: "#ffffff",
-    lightColor: "#164cdc",
-    parcel: "safe"
+    elementColor: "#164cdc",
+    effectBoxSizing: "safe"
   })
   const handleSwitchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name as keyof typeof config;
@@ -61,7 +61,7 @@ const AdjustableDemo = () => {
     })
   }
 
-  const handleLightColorChange = (color: ColorResult) => { handleColorChange(color, "lightColor") }
+  const handleLightColorChange = (color: ColorResult) => { handleColorChange(color, "elementColor") }
   const handleBorderColorChange = (color: ColorResult) => { handleColorChange(color, "borderColor") }
   const handleColorChange = (color: ColorResult, name: keyof typeof config) => {
     setConfig(pre => ({ ...pre, [name]: color.hex }))
@@ -108,11 +108,11 @@ const AdjustableDemo = () => {
           </ListItemContainer>
           <ListItemContainer index={1}>
             <ListItemText primary="Light Effect"/>
-            <Switch edge="end" name="effectBackground" checked={config.effectBackground} onChange={handleSwitchChange}/>
+            <Switch edge="end" name="effectBackground" checked={config.elementEffect} onChange={handleSwitchChange}/>
           </ListItemContainer>
           <ListItemContainer index={2}>
             <ListItemText primary="Border Effect"/>
-            <Switch edge="end" name="effectBorder" checked={config.effectBorder} onChange={handleSwitchChange}/>
+            <Switch edge="end" name="effectBorder" checked={config.borderEffect} onChange={handleSwitchChange}/>
           </ListItemContainer>
           <ListItemContainer index={4}>
             <ListItemText primary="Border Width"/>
@@ -128,7 +128,7 @@ const AdjustableDemo = () => {
           </ListItemContainer>
           <ListItemContainer index={4}>
             <ListItemText primary="Light Color"/>
-            <ColorPicker color={config.lightColor} onChangeComplete={handleLightColorChange} />
+            <ColorPicker color={config.elementColor} onChangeComplete={handleLightColorChange} />
           </ListItemContainer>
         </List>
 

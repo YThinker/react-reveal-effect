@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
+// import { createRoot } from 'react-dom/client';
 import { render } from 'react-dom';
 import './index.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import { RevealEffectConfig } from './RevealEffect';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
@@ -15,14 +15,25 @@ const theme = createTheme({
   palette: { mode: "dark" }
 });
 
+// const root = createRoot(document.getElementById('root')!);
+// root.render(
+//   <StrictMode>
+//     <HashRouter>
+//       <ThemeProvider theme={theme}>
+//         <StyledEngineProvider injectFirst>
+//           <App />
+//         </StyledEngineProvider>
+//       </ThemeProvider>
+//     </HashRouter>
+//   </StrictMode>
+// );
+
 render(
   <StrictMode>
     <HashRouter>
       <ThemeProvider theme={theme}>
         <StyledEngineProvider injectFirst>
-          <RevealEffectConfig>
-            <App />
-          </RevealEffectConfig>
+          <App />
         </StyledEngineProvider>
       </ThemeProvider>
     </HashRouter>

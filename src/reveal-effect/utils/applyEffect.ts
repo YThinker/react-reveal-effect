@@ -6,7 +6,7 @@ import { ApplyEffectInfoType, GlobalEffectConfigType, InitObjectType, PreProcess
 export default function applyEffect(
   selector: HTMLElement | Array<HTMLElement>,
   isContainer: boolean,
-  options: GlobalEffectConfigType,
+  config: GlobalEffectConfigType,
   pageX: number|null,
   pageY: number|null,
   initObject: MutableRefObject<InitObjectType | undefined>
@@ -22,7 +22,7 @@ export default function applyEffect(
       return initObject.current;
     }
     return {
-      options: Object.assign({}, options),
+      config: Object.assign({}, config),
       childrenBorder: isContainer && selector ? getPreProcessElements(selector) : undefined,
       children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
       isPressed: false
@@ -31,22 +31,22 @@ export default function applyEffect(
 
   initObject.current = init();
   /**
-   * @description To get the newest options
+   * @description To get the newest config
    */
-  initObject.current.options = Object.assign({}, options);
+  initObject.current.config = Object.assign({}, config);
 
   const initObjectCopy = initObject.current;
 
   /**
-   * @description clear effect when options have been changed
+   * @description clear effect when config have been changed
    */
-  if(!initObjectCopy.options.clickEffect){
+  if(!initObjectCopy.config.clickEffect){
     initObjectCopy.children?.forEach(item => {
       handleRemove(item, "mousedown");
       handleRemove(item, "mouseup");
     });
   }
-  if(!initObjectCopy.options.effectBorder){
+  if(!initObjectCopy.config.borderEffect){
     removeChildrenBorderEventListener();
     clearAllBorderEffect();
   }
@@ -66,20 +66,20 @@ export default function applyEffect(
     }
     //element background effect --------------------
     const handleMousemoveEvent = (e: MouseEvent) => {
-      const { clickEffectColor, lightColor, clickEffectGradientSize, lightGradientSize: gradientSize } = initObjectCopy.options;
+      const { clickColor, elementColor, clickGradientSize, elementGradientSize: gradientSize } = initObjectCopy.config;
 
       let x = e.pageX - getOffset(element).left - window.scrollX
       let y = e.pageY - getOffset(element).top - window.scrollY
 
-      const { options, isPressed } = initObjectCopy;
-      if (options.clickEffect && isPressed) {
-        let cssLightEffect = `radial-gradient(circle ${clickEffectGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickEffectColor || lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
-        options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
+      const { config, isPressed } = initObjectCopy;
+      if (config.clickEffect && isPressed) {
+        let cssLightEffect = `radial-gradient(circle ${clickGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickColor || elementColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
+        config.elementEffect && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${elementColor}, rgba(255,255,255,0))`)
 
-        drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
+        drawEffect(element, x, y, elementColor, gradientSize, cssLightEffect)
       }
-      else if(options.effectBackground){
-        drawEffect(element, x, y, lightColor, gradientSize)
+      else if(config.elementEffect){
+        drawEffect(element, x, y, elementColor, gradientSize)
       }
     }
     element.el.addEventListener("mousemove", handleMousemoveEvent);
@@ -104,15 +104,15 @@ export default function applyEffect(
     const handleMousedownEvent = (e: MouseEvent) => {
       initObjectCopy.isPressed = true;
 
-      const { clickEffectColor, lightColor, clickEffectGradientSize, lightGradientSize: gradientSize } = initObjectCopy.options;
+      const { clickColor, elementColor, clickGradientSize, elementGradientSize: gradientSize } = initObjectCopy.config;
 
       const x = e.pageX - getOffset(element).left - window.scrollX
       const y = e.pageY - getOffset(element).top - window.scrollY
 
-      let cssLightEffect = `radial-gradient(circle ${clickEffectGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickEffectColor || lightColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
-      initObjectCopy.options.effectBackground && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${lightColor}, rgba(255,255,255,0))`)
+      let cssLightEffect = `radial-gradient(circle ${clickGradientSize}px at ${x}px ${y}px, rgba(255,255,255,0), ${clickColor || elementColor}, rgba(255,255,255,0), rgba(255,255,255,0))`;
+      initObjectCopy.config.elementEffect && (cssLightEffect += `, radial-gradient(circle ${gradientSize}px at ${x}px ${y}px, ${elementColor}, rgba(255,255,255,0))`)
 
-      drawEffect(element, x, y, lightColor, gradientSize, cssLightEffect)
+      drawEffect(element, x, y, elementColor, gradientSize, cssLightEffect)
     }
     element.el.addEventListener("mousedown", handleMousedownEvent)
     element.removeMouseListener.mousedown = () => element.el.removeEventListener("mousedown", handleMousedownEvent);
@@ -121,28 +121,28 @@ export default function applyEffect(
     const handleMouseupEvent = (e: MouseEvent) => {
       initObjectCopy.isPressed = false;
 
-      const { lightColor, lightGradientSize: gradientSize } = initObjectCopy.options;
+      const { elementColor, elementGradientSize: gradientSize } = initObjectCopy.config;
 
       const x = e.pageX - getOffset(element).left - window.scrollX
       const y = e.pageY - getOffset(element).top - window.scrollY
 
-      initObjectCopy.options.effectBackground ?
-      drawEffect(element, x, y, lightColor, gradientSize) :
+      initObjectCopy.config.elementEffect ?
+      drawEffect(element, x, y, elementColor, gradientSize) :
       clearEffect(element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
     element.removeMouseListener.mouseup = () => element.el.removeEventListener("mouseup", handleMouseupEvent);
   }
 
-  if (isContainer && initObjectCopy.options.effectBorder && initObjectCopy?.childrenBorder) {
+  if (isContainer && initObjectCopy.config.borderEffect && initObjectCopy?.childrenBorder) {
     for (let i = 0; i < initObjectCopy.childrenBorder.length; i++) {
       const element = initObjectCopy.childrenBorder[i];
-      const options = initObjectCopy.options;
+      const config = initObjectCopy.config;
       const x = pageX - getOffset(element).left - window.scrollX
       const y = pageY - getOffset(element).top - window.scrollY
 
-      if (isIntersected(element, pageX, pageY, options.borderGradientSize)) {
-        drawEffect(element, x, y, options.borderColor, options.borderGradientSize)
+      if (isIntersected(element, pageX, pageY, config.borderGradientSize)) {
+        drawEffect(element, x, y, config.borderColor, config.borderGradientSize)
       }
       else {
         clearEffect(element);
@@ -154,12 +154,12 @@ export default function applyEffect(
   if (!isContainer && initObjectCopy?.children) {
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
-      const options = initObjectCopy.options;
+      const config = initObjectCopy.config;
       //element background effect
       enableBackgroundEffects(element)
 
       //element click effect
-      options.clickEffect && enableClickEffects(element)
+      config.clickEffect && enableClickEffects(element)
     }
   }
 
@@ -185,8 +185,8 @@ export default function applyEffect(
    * @description Clear Effect
    */
   return {
-    borderIsIntersected: initObjectCopy.childrenBorder?.map(element => isIntersected(element, pageX, pageY, options.borderGradientSize)),
-    elementIsIntersected: initObjectCopy.children?.map(element => isIntersected(element, pageX, pageY, options.borderGradientSize)),
+    borderIsIntersected: initObjectCopy.childrenBorder?.map(element => isIntersected(element, pageX, pageY, config.borderGradientSize)),
+    elementIsIntersected: initObjectCopy.children?.map(element => isIntersected(element, pageX, pageY, config.borderGradientSize)),
     removeEffect() {
       removeChildrenEventListener();
       removeChildrenBorderEventListener();

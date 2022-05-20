@@ -8,25 +8,26 @@ import Demo from './pages/Demo';
 import Docs from './pages/Docs';
 import Home from './pages/Home';
 import Changelog from './pages/Changelog';
+import { RevealEffectConfig } from './RevealEffect';
 
 const App = () => {
   const location = useLocation();
 
   return (
-    <>
+    <RevealEffectConfig>
       <AppBar />
       <BackToTop />
       <AnimatePresence>
-        <Routes location={location} key={location.pathname}>AnimationPage
-        {routes.map((item, idx) => {
-          const element = <AnimationPage>{item.element}</AnimationPage>;
-          return item.index ?
-            <Route index element={element} key={idx}/> :
-            <Route path={item.path} element={element} key={idx}/>
-        })}
+        <Routes location={location} key={location.pathname}>
+          {routes.map((item, idx) => {
+            const element = <AnimationPage>{item.element}</AnimationPage>;
+            return item.index ?
+              <Route index element={element} key={idx}/> :
+              <Route path={item.path} element={element} key={idx}/>
+          })}
         </Routes>
       </AnimatePresence>
-    </>
+    </RevealEffectConfig>
   )
 };
 
