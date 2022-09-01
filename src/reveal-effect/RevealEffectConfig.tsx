@@ -1,13 +1,13 @@
 import { createContext, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useForkRef from "./hooks/useForkRef";
-import { ConfigComponentTypeMap, GlobalEffectConfigType, OverridableComponent, PositionProps } from "./types";
+import { ConfigComponentTypeMap, EffectType, GlobalEffectConfigType, OverridableComponent, PositionProps } from "./types";
 
 export const MousePosition = createContext<PositionProps>({
   pageX: null,
   pageY: null,
 });
 
-const globalConfig = {
+const globalConfig: GlobalEffectConfigType<"background-image"> | GlobalEffectConfigType<"border-image"> = {
   elementEffect: true,
   borderEffect: true,
   clickEffect: false,
@@ -18,8 +18,9 @@ const globalConfig = {
   elementGradientSize: 150,
   clickGradientSize: 80,
   stop: false,
+  effectType: "background-image"
 }
-export const EffectConfig = createContext<GlobalEffectConfigType>(globalConfig);
+export const EffectConfig = createContext<GlobalEffectConfigType<"background-image"> | GlobalEffectConfigType<"border-image">>(globalConfig);
 
 const RevealEffectConfig = forwardRef((props, ref) => {
 
@@ -86,6 +87,6 @@ const RevealEffectConfig = forwardRef((props, ref) => {
       </EffectConfig.Provider>
     </MousePosition.Provider>
   );
-}) as OverridableComponent<ConfigComponentTypeMap<true, never>|ConfigComponentTypeMap<false>>
+}) as OverridableComponent<ConfigComponentTypeMap<EffectType, true, never>|ConfigComponentTypeMap<EffectType, false>>
 
 export default RevealEffectConfig;

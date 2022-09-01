@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useRevealEffect } from "../../../../RevealEffect";
 
-import { Box, Link, Typography, Skeleton, styled, Button, Grid, Container } from "@mui/material";
+import { Box, Link as MaterialLink, Typography, Skeleton, styled, Button, Grid, Container } from "@mui/material";
 import { ArrowRight, ContentCopy, Done } from '@mui/icons-material';
 import copy from "copy-to-clipboard";
 
@@ -9,6 +9,7 @@ import GithubIcon from "../../../../img/GithubIcon";
 import NpmIcon from "../../../../img/NpmIcon";
 
 import logo from "../../../../img/logo.svg";
+import { Link } from "react-router-dom";
 
 const imgStyles = {
   width: "24vmin",
@@ -116,7 +117,7 @@ const PageHeader = () => {
       <Grid container justifyContent="center" alignItems="center"
         gap={3} sx={{ marginBottom }}
       >
-        <Button variant="contained" href="#/docs" endIcon={<ArrowRight />}>Docs</Button>
+        <Button component={Link} variant="contained" to="/docs" endIcon={<ArrowRight />}>Docs</Button>
         <Button
           sx={{
             textTransform: "none",
@@ -132,12 +133,12 @@ const PageHeader = () => {
         </Button>
       </Grid>
       <Box>
-        <Link sx={{margin: "0 20px", display: "inline-block"}} href="https://github.com/YThinker/react-reveal-effect" target="_blank">
+        <MaterialLink sx={{margin: "0 20px", display: "inline-block"}} href="https://github.com/YThinker/react-reveal-effect" target="_blank">
           <GithubIcon sx={{fontSize: 40}}/>
-        </Link>
-        <Link sx={{margin: "0 20px", display: "inline-block"}} href="https://www.npmjs.com/package/react-reveal-effect" target="_blank">
+        </MaterialLink>
+        <MaterialLink sx={{margin: "0 20px", display: "inline-block"}} href="https://www.npmjs.com/package/react-reveal-effect" target="_blank">
           <NpmIcon sx={{fontSize: 40}}/>
-        </Link>
+        </MaterialLink>
       </Box>
 
     </Container>

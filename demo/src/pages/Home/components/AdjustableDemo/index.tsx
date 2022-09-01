@@ -6,7 +6,7 @@ import ColorPicker from "../../../../componnets/ColorPicker";
 // import { RevealEffect, RevealEffectStylesType } from "react-reveal-effect";
 import { RevealEffect, RevealEffectStylesType } from "../../../../RevealEffect";
 
-const listItemEffectConfig: RevealEffectStylesType = {
+const listItemEffectConfig: RevealEffectStylesType<"background-image", "safe"> = {
   clickEffect: false,
   elementEffect: false,
   borderGradientSize: 70,
@@ -27,7 +27,7 @@ const ListItemContainer = (props: PropsWithChildren<ListItemContainerProps>) => 
   </RevealEffect>
 )
 
-interface RevealEffectConfig extends RevealEffectStylesType {
+interface RevealEffectConfig extends RevealEffectStylesType<"background-image", "safe"> {
   borderWidth: number;
 }
 const AdjustableDemo = () => {

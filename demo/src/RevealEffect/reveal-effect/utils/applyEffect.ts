@@ -1,35 +1,22 @@
 import { MutableRefObject } from "react";
-import { drawEffect, getOffset, getPreProcessElements, handleRemove, isIntersected } from "./helpers";
+import { clearAllBackgroundEffect, clearAllBorderEffect, clearEffect, drawEffect, getOffset, handleRemove, init, isIntersected, removeChildrenBorderEventListener, removeChildrenEventListener } from "./helpers";
 
-import { ApplyEffectInfoType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "../types";
+import { ApplyEffectInfoType, EffectType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "../types";
 
-export default function applyEffect(
+export default function applyEffect<T extends EffectType>(
   selector: HTMLElement | Array<HTMLElement>,
   isContainer: boolean,
-  config: GlobalEffectConfigType,
+  config: GlobalEffectConfigType<T>,
   pageX: number|null,
   pageY: number|null,
-  initObject: MutableRefObject<InitObjectType | undefined>
+  initObject: MutableRefObject<InitObjectType<T> | undefined>
 ): ApplyEffectInfoType|undefined {
 
   if(pageX === null || pageY === null){
     return;
   }
 
-  function init() {
-
-    if (initObject.current) {
-      return initObject.current;
-    }
-    return {
-      config: Object.assign({}, config),
-      childrenBorder: isContainer && selector ? getPreProcessElements(selector) : undefined,
-      children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
-      isPressed: false
-    };
-  }
-
-  initObject.current = init();
+  initObject.current = init<T>(initObject, config, isContainer, selector);
   /**
    * @description To get the newest config
    */
@@ -47,16 +34,13 @@ export default function applyEffect(
     });
   }
   if(!initObjectCopy.config.borderEffect){
-    removeChildrenBorderEventListener();
-    clearAllBorderEffect();
+    removeChildrenBorderEventListener(initObjectCopy);
+    clearAllBorderEffect(initObjectCopy);
   }
 
-  function clearEffect(element: PreProcessElement) {
-    initObjectCopy.isPressed = false
-    element.el.style.backgroundImage = element.oriBg
-  }
-
-
+  /**
+   * @description element mouse move listener
+   */
   function enableBackgroundEffects(
     element: PreProcessElement,
   ) {
@@ -64,7 +48,7 @@ export default function applyEffect(
     if (element.removeMouseListener.mousemove || element.removeMouseListener.mouseleave) {
       return;
     }
-    //element background effect --------------------
+    /* element background effect -------------------- */
     const handleMousemoveEvent = (e: MouseEvent) => {
       const { clickColor, elementColor, clickGradientSize, elementGradientSize: gradientSize } = initObjectCopy.config;
 
@@ -86,14 +70,15 @@ export default function applyEffect(
     element.removeMouseListener.mousemove = () => element.el.removeEventListener("mousemove", handleMousemoveEvent);
 
     const handleMouseleaveEvent = () => {
-      clearEffect(element)
+      clearEffect(initObjectCopy, element)
     }
     element.el.addEventListener("mouseleave", handleMouseleaveEvent)
     element.removeMouseListener.mouseleave = () => element.el.removeEventListener("mouseleave", handleMouseleaveEvent);
   }
 
-
-
+  /**
+   * @description element mouse click listener
+   */
   function enableClickEffects(
     element: PreProcessElement
   ) {
@@ -128,7 +113,7 @@ export default function applyEffect(
 
       initObjectCopy.config.elementEffect ?
       drawEffect(element, x, y, elementColor, gradientSize) :
-      clearEffect(element);
+      clearEffect(initObjectCopy, element);
     }
     element.el.addEventListener("mouseup", handleMouseupEvent)
     element.removeMouseListener.mouseup = () => element.el.removeEventListener("mouseup", handleMouseupEvent);
@@ -145,7 +130,7 @@ export default function applyEffect(
         drawEffect(element, x, y, config.borderColor, config.borderGradientSize)
       }
       else {
-        clearEffect(element);
+        clearEffect(initObjectCopy, element);
       }
 
     }
@@ -155,6 +140,16 @@ export default function applyEffect(
     for (let i = 0; i < initObjectCopy.children.length; i++) {
       const element = initObjectCopy.children[i];
       const config = initObjectCopy.config;
+      if(config.effectType === "border-image") {
+        const x = pageX - getOffset(element).left - window.scrollX
+        const y = pageY - getOffset(element).top - window.scrollY
+        if (isIntersected(element, pageX, pageY, config.borderGradientSize)) {
+          drawEffect(element, x, y, config.borderColor, config.borderGradientSize, undefined, config.effectType)
+        }
+        else {
+          clearEffect(initObjectCopy, element);
+        }
+      }
       //element background effect
       enableBackgroundEffects(element)
 
@@ -163,24 +158,6 @@ export default function applyEffect(
     }
   }
 
-
-
-  function removeChildrenEventListener() {
-    initObject.current?.children?.forEach(item => {
-      handleRemove(item);
-    })
-  }
-  function removeChildrenBorderEventListener() {
-    initObject.current?.childrenBorder?.forEach(item => {
-      handleRemove(item);
-    });
-  }
-  function clearAllBackgroundEffect() {
-    initObject.current?.children?.forEach(item => clearEffect(item));
-  }
-  function clearAllBorderEffect() {
-    initObject.current?.childrenBorder?.forEach(item => clearEffect(item));
-  }
   /**
    * @description Clear Effect
    */
@@ -188,10 +165,10 @@ export default function applyEffect(
     borderIsIntersected: initObjectCopy.childrenBorder?.map(element => isIntersected(element, pageX, pageY, config.borderGradientSize)),
     elementIsIntersected: initObjectCopy.children?.map(element => isIntersected(element, pageX, pageY, config.borderGradientSize)),
     removeEffect() {
-      removeChildrenEventListener();
-      removeChildrenBorderEventListener();
-      clearAllBorderEffect();
-      clearAllBackgroundEffect();
+      removeChildrenEventListener(initObjectCopy);
+      removeChildrenBorderEventListener(initObjectCopy);
+      clearAllBorderEffect(initObjectCopy);
+      clearAllBackgroundEffect(initObjectCopy);
       initObject.current = undefined;
     }
   }

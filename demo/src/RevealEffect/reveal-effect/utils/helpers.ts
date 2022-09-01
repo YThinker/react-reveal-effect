@@ -1,4 +1,53 @@
-import { PreProcessElement, PreProcessElements } from "../types";
+import { MutableRefObject } from "react";
+import { EffectType, GlobalEffectConfigType, InitObjectType, PreProcessElement, PreProcessElements } from "../types";
+
+export function init<T extends EffectType>(
+	initObject: MutableRefObject<InitObjectType<T> | undefined>,
+	config: GlobalEffectConfigType<T>,
+	isContainer: boolean,
+	selector: HTMLElement | Array<HTMLElement>
+): InitObjectType<T> {
+
+	if (initObject.current) {
+		return initObject.current;
+	}
+	if(config.effectType === "border-image"){
+		return {
+			config: Object.assign({}, config),
+			children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
+			isPressed: false
+		};
+	}
+	return {
+		config: Object.assign({}, config),
+		childrenBorder: (isContainer && selector) ? getPreProcessElements(selector) : undefined,
+		children: (!isContainer) && selector ? getPreProcessElements(selector) : undefined,
+		isPressed: false
+	};
+}
+
+export function clearEffect<T extends EffectType>(initObjectCopy: InitObjectType<T>, element: PreProcessElement) {
+	initObjectCopy.isPressed = false
+	element.el.style.backgroundImage = element.oriBg
+	element.el.style.borderImage = element.oriBorderBg
+}
+
+export function removeChildrenEventListener<T extends EffectType>(initObjectCopy: InitObjectType<T>) {
+	initObjectCopy?.children?.forEach(item => {
+		handleRemove(item);
+	})
+}
+export function removeChildrenBorderEventListener<T extends EffectType>(initObjectCopy: InitObjectType<T>) {
+	initObjectCopy?.childrenBorder?.forEach(item => {
+		handleRemove(item);
+	});
+}
+export function clearAllBackgroundEffect<T extends EffectType>(initObjectCopy: InitObjectType<T>) {
+	initObjectCopy?.children?.forEach(item => clearEffect(initObjectCopy, item));
+}
+export function clearAllBorderEffect<T extends EffectType>(initObjectCopy: InitObjectType<T>) {
+	initObjectCopy?.childrenBorder?.forEach(item => clearEffect(initObjectCopy, item));
+}
 
 export function getOffset(element: PreProcessElement) {
 	return {
@@ -13,7 +62,8 @@ export function drawEffect(
 	y: number,
 	lightColor: string,
 	gradientSize: number,
-	cssLightEffect?: string
+	cssLightEffect?: string,
+	effectType?: EffectType,
 ) {
 	let lightBg;
 
@@ -23,6 +73,10 @@ export function drawEffect(
 		lightBg = cssLightEffect;
 	}
 
+	if(effectType === "border-image") {
+		element.el.style.borderImage = lightBg + ` 1% / 1 / 0 stretch`;
+		return;
+	}
 	element.el.style.backgroundImage = lightBg;
 }
 
@@ -32,6 +86,7 @@ export function preProcessElements(elements: HTMLElement[]) {
 	elements.forEach(el => {
 		res.push({
 			oriBg: getComputedStyle(el)["backgroundImage"],
+			oriBorderBg: getComputedStyle(el)["borderImage"],
 			el: el,
       removeMouseListener: {
 				mousedown: null,

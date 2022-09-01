@@ -68,7 +68,8 @@ export interface PositionProps {
   pageY: number | null,
 }
 
-export interface GlobalEffectConfigType {
+export type EffectType = "background-image" | "border-image";
+export interface GlobalEffectConfigType<T extends EffectType> {
   borderEffect: boolean,
   elementEffect: boolean,
   clickEffect: boolean,
@@ -79,22 +80,23 @@ export interface GlobalEffectConfigType {
   elementGradientSize: number,
   clickGradientSize: number,
   stop: boolean;
+  effectType: T;
 }
 
 type CustomPartial<T> = {
   [K in keyof T]?: T[K] | undefined;
 }
-export interface EffectConfigType extends CustomPartial<GlobalEffectConfigType> {}
+export interface EffectConfigType<T extends EffectType> extends CustomPartial<GlobalEffectConfigType<T>> { }
 
 
-export interface ConfigComponentProps<B extends boolean> {
+export interface ConfigComponentProps<T extends EffectType, B extends boolean> {
   mountOnBody?: B;
-  config?: EffectConfigType;
+  config?: EffectConfigType<T>;
   component?: B extends true ? never : ElementType;
   off?: boolean;
 }
-export interface ConfigComponentTypeMap<B extends boolean = true, D extends ElementType = 'div', P = {}> {
-  props: P & PropsWithChildren<ConfigComponentProps<B>>;
+export interface ConfigComponentTypeMap<T extends EffectType = "background-image", B extends boolean = true, D extends ElementType = 'div', P = {}> {
+  props: P & PropsWithChildren<ConfigComponentProps<T, B>>;
   defaultComponent: D;
 }
 
@@ -105,6 +107,7 @@ export type EffectElementRefs = Array<MutableRefObject<HTMLElement | null>>;
 
 export interface PreProcessElement {
   oriBg: CSSStyleDeclaration["backgroundImage"],
+  oriBorderBg: CSSStyleDeclaration["borderImage"],
   el: HTMLElement,
   removeMouseListener: RemoveMouseListener
 }
@@ -117,51 +120,49 @@ export interface RemoveMouseListener {
 
 export type PreProcessElements = Array<PreProcessElement>;
 
-export interface InitObjectType {
-  config: GlobalEffectConfigType,
+export interface InitObjectType<T extends EffectType> {
+  config: GlobalEffectConfigType<T>,
   childrenBorder?: PreProcessElements,
   children?: PreProcessElements,
   isPressed: boolean
 }
 
-type BoxSizingType = "content-box" | "border-box" | "safe";
-export interface RevealEffectStylesType extends EffectConfigType {
-  borderWidth?: string | number,
+export type BoxSizingType = "content-box" | "border-box" | "safe";
+export interface RevealEffectStylesType<T extends EffectType, B extends BoxSizingType = "content-box"> extends EffectConfigType<T> {
+  borderWidth?: T extends "border-image" ? never : string | number,
 
   /**
    * 是否使用非入侵式包裹光效
    * @description "content-box" 使用对布局有影响的光效包裹元素，包裹使用光效的元素的父元素会有一段溢出的宽高
    * @description "border-box" 破坏性更改使用光效的元素，缩放使用光效的元素的宽高
    * @description "safe" 不对布局产生影响，也不更改使用光效的元素，通过插入一个absolute元素的方式添加边框光效（可能会被overflow遮挡）
-   * @default "parcel"
+   * @default "content-box"
    */
-  effectBoxSizing?: BoxSizingType,
+  effectBoxSizing?: T extends "border-image" ? never : B,
 }
 
-export interface RevealEffectComponentProps {
+export interface RevealEffectComponentProps<T extends EffectType, B extends BoxSizingType = "content-box"> {
   component?: ElementType;
-  config?: RevealEffectStylesType;
+  config?: RevealEffectStylesType<T, B>;
   children: ReactElement<HTMLElement>;
 
   /**
-   * @description (It works only when parcel = "shrink") border style
+   * @description (It works only when effectBoxSizing = "safe") border style
    */
-  borderStyle?: CSSProperties | undefined;
+  borderStyle?: B extends "safe" ? CSSProperties | undefined : never;
 
   /**
-   * @description (It works only when parcel = "shrink") border className
+   * @description (It works only when effectBoxSizing = "safe") border className
    */
-  borderClassName?: string | undefined;
+  borderClassName?: B extends "safe" ? string | undefined : never;
 
   /**
-   * @description border ref
+   * @description (It works only when effectBoxSizing = "safe") border ref
    */
-  borderRef?: MutableRefObject<HTMLDivElement | null>;
-
-  // [key: string]: any;
+  borderRef?: B extends "safe" ? MutableRefObject<HTMLDivElement | null> : never;
 }
-export interface RevealEffectComponentTypeMap<D extends ElementType = 'div', P = {}> {
-  props: P & PropsWithChildren<RevealEffectComponentProps>;
+export interface RevealEffectComponentTypeMap<B extends BoxSizingType = "content-box", D extends ElementType = 'div', P = {}> {
+  props: P & (PropsWithChildren<RevealEffectComponentProps<"background-image", B>> | PropsWithChildren<RevealEffectComponentProps<"border-image", B>>);
   defaultComponent: D;
 }
 
@@ -170,10 +171,15 @@ export interface ApplyEffectInfoType {
   elementIsIntersected: boolean[] | undefined;
   removeEffect: () => void;
 }
-export type ApplyEffectType = (
+export type ApplyEffectType<T extends EffectType> = (
   selector: HTMLElement | Array<HTMLElement>,
   isContainer: boolean,
-  config: GlobalEffectConfigType,
+  config: GlobalEffectConfigType<T>,
   pageX: number, pageY: number,
-  initObject: MutableRefObject<InitObjectType | undefined>
+  initObject: MutableRefObject<InitObjectType<T> | undefined>
 ) => ApplyEffectInfoType
+
+export interface EffectSelector<T> {
+  borderSelector?: T extends "border-image" ? never : (EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[]),
+  elementSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
+}

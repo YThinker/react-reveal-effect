@@ -108,6 +108,7 @@ const Child = () => {
 | borderEffect        | take border effect  | borderEffect?: boolean       | true                      |
 | elementEffect       | take hover effect   | elementEffect?: boolean      | true                      |
 | stop                | stop drawer effect  | stop?: boolean               | false                     |
+| effectType                | use which css property to draw the light effect  | stop?: "border-image"\|"background-image"               | "background-image"                    |
 
 ### Hooks
 Parameter
@@ -150,13 +151,19 @@ MIT
 &nbsp;
 
 ## Q&A
-### Define borderStyle|borderClassName|borderRef when RevealEffect's config effectBoxSizing is not "shrink"
+### Define borderStyle|borderClassName|borderRef when RevealEffect's config effectBoxSizing is not "effectBoxSizing"
 &nbsp;&nbsp;&nbsp;&nbsp;If you have defined borderStyle|borderClassName|borderRef When RevealEffect component's config effectBoxSizing is not "border-box", they will take effect on the container element because in this case border effect will be added on the container element.
+### "border-image" effectType doesn't support CSS property "border-radius"
+https://stackoverflow.com/questions/5706963/possible-to-use-border-radius-together-with-a-border-image-which-has-a-gradient
+&nbsp;&nbsp;&nbsp;&nbsp;Use clip-path: inset(0 round radius-pixel) or overflow to replace border-radius
 
 
 &nbsp;
 
 ## Changelog
+### v3.1.0
+Optimize: narrow type inference\
+New: support to use CSS "border-image" property to draw the effect
 ### v3.0.0
 Fix: Compatible with React 18\
 Optimize: Change the attribute name to make it more uniform and semantic.\

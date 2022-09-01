@@ -12,6 +12,7 @@ import ChromeLogo from "../../../../img/chrome_48x48.png"
 import FirefoxLogo from "../../../../img/firefox_48x48.png"
 import SafariLogo from "../../../../img/safari_48x48.png"
 import OperaLogo from "../../../../img/opera_48x48.png"
+import { Link } from 'react-router-dom';
 
 
 const environmentCompacibilityVersion = [{
@@ -73,7 +74,7 @@ const StartNow = () => {
         <Box sx={{
           width: 400
         }}>
-          <Button variant="contained" href="#/docs" endIcon={<ArrowRight />}
+          <Button component={Link} variant="contained" to="/docs" endIcon={<ArrowRight />}
             sx={{ mb: 4 }}
           >Docs</Button>
           <Button

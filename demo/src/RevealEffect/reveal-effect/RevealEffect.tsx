@@ -1,6 +1,6 @@
 import { Children, cloneElement, forwardRef, useEffect, useRef, useState } from "react";
 import useForkRef from "./hooks/useForkRef";
-import { OverridableComponent, RevealEffectComponentTypeMap } from "./types";
+import { BoxSizingType, OverridableComponent, RevealEffectComponentTypeMap } from "./types";
 import useRevealEffect from "./useRevealEffect";
 
 const RevealEffect = forwardRef((props, ref) => {
@@ -123,6 +123,6 @@ const RevealEffect = forwardRef((props, ref) => {
   } else {
     return child;
   }
-}) as OverridableComponent<RevealEffectComponentTypeMap>
+}) as OverridableComponent<RevealEffectComponentTypeMap<BoxSizingType>>
 
 export default RevealEffect;

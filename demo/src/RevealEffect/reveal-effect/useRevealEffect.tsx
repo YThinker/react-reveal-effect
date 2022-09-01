@@ -1,14 +1,11 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import applyEffect from "./utils/applyEffect";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
-import { ApplyEffectInfoType, EffectElementRef, EffectElementRefs, EffectConfigType, InitObjectType } from "./types";
+import { ApplyEffectInfoType, EffectConfigType, EffectElementRef, EffectElementRefs, EffectSelector, EffectType, InitObjectType } from "./types";
 
-const useRevealEffect = (
-  selector: {
-    borderSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
-    elementSelector?: EffectElementRef | EffectElementRefs | HTMLElement | null | HTMLElement[],
-  },
-  config?: EffectConfigType
+const useRevealEffect = <T extends EffectType>(
+  selector: EffectSelector<T>,
+  config?: EffectConfigType<T>
 ) => {
 
   const { pageX, pageY } = useContext(MousePosition);
@@ -21,8 +18,8 @@ const useRevealEffect = (
 
   const assignConfig = useMemo(() => Object.assign({}, globalConfig, config), [globalConfig, config]);
 
-  const initBorderObject = useRef<InitObjectType | undefined>();
-  const initElementObject = useRef<InitObjectType | undefined>();
+  const initBorderObject = useRef<InitObjectType<T> | undefined>();
+  const initElementObject = useRef<InitObjectType<T> | undefined>();
 
   const borderInfo = useRef<ApplyEffectInfoType | undefined>();
   const elementInfo = useRef<ApplyEffectInfoType | undefined>();
@@ -40,7 +37,7 @@ const useRevealEffect = (
   const draw = (
     selector: HTMLElement | HTMLElement[],
     isContainer?: boolean
-  ) => applyEffect(
+  ) => applyEffect<T>(
     selector,
     Boolean(isContainer),
     assignConfig,

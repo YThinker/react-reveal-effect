@@ -17,7 +17,7 @@ const Principle = () => {
         padding: "max(6vh, 40px) 0"
       }}
     >
-      <SectionTitle title="Principle" subtitle="Try to move mouse over the elements"/>
+      <SectionTitle title="Principle" subtitle="Try to move mouse over the elements(when use 'background-image' effectType)"/>
       <div ref={borderRef} style={{
         width: "300px",
         height: "300px",

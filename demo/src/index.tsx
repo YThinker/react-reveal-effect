@@ -8,7 +8,7 @@ import '@fontsource/roboto/700.css';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -30,13 +30,13 @@ const theme = createTheme({
 
 render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <StyledEngineProvider injectFirst>
           <App />
         </StyledEngineProvider>
       </ThemeProvider>
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>,
   document.getElementById('root')
 );
