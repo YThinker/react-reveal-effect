@@ -1,4 +1,4 @@
-import { Build, Code, ExpandLess, ExpandMore, GridView, Phishing, Tune } from "@mui/icons-material";
+import { Build, Code, ExpandLess, ExpandMore, BuildCircle, Phishing, Tune } from "@mui/icons-material";
 import { Collapse, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled } from "@mui/material";
 import { AnimatePresence } from "framer-motion";
 import { ReactNode, useContext, useEffect, useState } from "react";
@@ -38,6 +38,10 @@ const Docs = () => {
     }}>
       <Drawer>
         <List>
+          <ListItemButton selected={location.pathname === "/docs/getstarted"} component={Link} to="/docs/getstarted">
+            <StyledListItemIcon><BuildCircle /></StyledListItemIcon>
+            <ListItemText>Getting Started</ListItemText>
+          </ListItemButton>
           <ListItemButton selected={location.pathname === "/docs/types"} component={Link} to="/docs/types">
             <StyledListItemIcon>
               <StyledImage src={TypescriptListIcon}

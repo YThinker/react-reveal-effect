@@ -64,8 +64,6 @@ const imgStyles = {
 
 const Logo = () => {
 
-  const logoContainerRef = useRef<HTMLDivElement|null>(null);
-
   return (
     <RevealEffect
       config={

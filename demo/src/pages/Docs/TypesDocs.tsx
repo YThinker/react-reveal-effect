@@ -112,7 +112,6 @@ const TypesDocs = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location.hash)
     if(location.hash) {
       document.querySelector(location.hash)?.scrollIntoView();
     }
