@@ -108,11 +108,11 @@ const AdjustableDemo = () => {
           </ListItemContainer>
           <ListItemContainer index={1}>
             <ListItemText primary="Light Effect"/>
-            <Switch edge="end" name="effectBackground" checked={config.elementEffect} onChange={handleSwitchChange}/>
+            <Switch edge="end" name="elementEffect" checked={config.elementEffect} onChange={handleSwitchChange}/>
           </ListItemContainer>
           <ListItemContainer index={2}>
             <ListItemText primary="Border Effect"/>
-            <Switch edge="end" name="effectBorder" checked={config.borderEffect} onChange={handleSwitchChange}/>
+            <Switch edge="end" name="borderEffect" checked={config.borderEffect} onChange={handleSwitchChange}/>
           </ListItemContainer>
           <ListItemContainer index={4}>
             <ListItemText primary="Border Width"/>

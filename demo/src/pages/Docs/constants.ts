@@ -4,6 +4,14 @@ export const TypePageHeaderStyles = {
   color: "#fff"
 }
 
+export const StartedPageHighlightStyles = {
+  textTransform: "none",
+  color: "#fff",
+  backgroundColor: "#000",
+  padding: "6px 16px",
+  borderRadius: '4px'
+}
+
 export const installCode = '$ npm install react-reveal-effect'
 
 export const providerCode = `
@@ -65,3 +73,26 @@ export const componentCode = `
     </RevealEffect>
   )
 `;
+
+export const vanillaCode = `
+  import { revealEffectConstructor } from 'react-reveal-effect';
+
+  const revealEffectInstance = new revealEffectConstrucotr(document.querySelectorAll('.reveal'), true, {
+    clickEffect: false,
+    borderColor: "rgba(255, 255, 255, 0.6)",
+    elementColor: "rgba(255, 255, 255, 0.3)",
+    effectType: "background-image"
+    root: document.body // optional
+  })
+
+  /** stop */
+  revealEffectInstance.stop();
+  /** start */
+  revealEffectInstance.start();
+  /** or */
+  revealEffectInstance.config = { stop: true }
+  revealEffectInstance.config = { stop: false }
+
+  /** manual operating draw(when root is undefined) */
+  reavealEffectInstance.draw(pageX, pageY)
+`

@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import AppBar from './componnets/AppBar';
 import AnimationPage from './componnets/AnimationPage';
 import BackToTop from './componnets/BackToTop';
@@ -39,7 +39,7 @@ const App = () => {
 interface RoutePathItem {
   index?: false | undefined;
   path: string;
-  element: JSX.Element;
+  element?: JSX.Element;
   children?: RouteItem[];
   hasAnimation?: boolean;
 }
@@ -70,6 +70,9 @@ const routes: RouteItem[] = [{
   path: "/docs",
   element: <Docs/>,
   children: [{
+    index: true,
+    element: <Navigate to='/docs/getstarted' replace />
+  }, {
     path: "/docs/types",
     element: <TypesDocs />
   }, {

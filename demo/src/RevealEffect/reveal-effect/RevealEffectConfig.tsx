@@ -1,4 +1,5 @@
 import { createContext, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { globalConfig } from "./constants";
 import useForkRef from "./hooks/useForkRef";
 import { ConfigComponentTypeMap, EffectType, GlobalEffectConfigType, OverridableComponent, PositionProps } from "./types";
 
@@ -7,20 +8,7 @@ export const MousePosition = createContext<PositionProps>({
   pageY: null,
 });
 
-const globalConfig: GlobalEffectConfigType<"background-image"> | GlobalEffectConfigType<"border-image"> = {
-  elementEffect: true,
-  borderEffect: true,
-  clickEffect: false,
-  borderColor: "rgba(255, 255, 255, 0.6)",
-  elementColor: "rgba(255, 255, 255, 0.3)",
-  clickColor: "rgba(255, 255, 255, 0.3)",
-  borderGradientSize: 150,
-  elementGradientSize: 150,
-  clickGradientSize: 80,
-  stop: false,
-  effectType: "background-image"
-}
-export const EffectConfig = createContext<GlobalEffectConfigType<"background-image"> | GlobalEffectConfigType<"border-image">>(globalConfig);
+export const EffectConfig = createContext<GlobalEffectConfigType<"background-image" | "border-image">>({...globalConfig});
 
 const RevealEffectConfig = forwardRef((props, ref) => {
 
@@ -37,8 +25,8 @@ const RevealEffectConfig = forwardRef((props, ref) => {
     if(userConfig){
       return {...globalConfig, ...userConfig};
     }
-    return globalConfig;
-  }, [globalConfig, userConfig])
+    return {...globalConfig};
+  }, [userConfig])
 
   const [position, setPosition] = useState<PositionProps>({pageX: null, pageY: null});
 
@@ -72,7 +60,7 @@ const RevealEffectConfig = forwardRef((props, ref) => {
         mountElementNode?.removeEventListener("mouseleave", handleMouseLeave);
       }
     }
-  }, [mountOnBody, Tag, off])
+  }, [mountOnBody, Tag, off, handleMouseMove, handleMouseLeave])
 
   return (
     <MousePosition.Provider value={position}>

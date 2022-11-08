@@ -83,6 +83,10 @@ export interface GlobalEffectConfigType<T extends EffectType> {
   effectType: T;
 }
 
+export interface ClassEffectConfigType<T extends EffectType> extends GlobalEffectConfigType<T> {
+  root?: HTMLElement | null | Window;
+}
+
 type CustomPartial<T> = {
   [K in keyof T]?: T[K] | undefined;
 }

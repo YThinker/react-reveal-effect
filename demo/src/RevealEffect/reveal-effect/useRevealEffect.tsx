@@ -1,7 +1,8 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import applyEffect from "./utils/applyEffect";
+import { useContext, useEffect, useMemo, useRef } from "react";
 import { EffectConfig, MousePosition } from "./RevealEffectConfig";
-import { ApplyEffectInfoType, EffectConfigType, EffectElementRef, EffectElementRefs, EffectSelector, EffectType, InitObjectType } from "./types";
+import { EffectConfigType, EffectSelector, EffectType } from "./types";
+import revealEffectConstructor from "./revealEffectConstructor";
+import { handleSelector, handleSelectors } from "./utils/helpers";
 
 const useRevealEffect = <T extends EffectType>(
   selector: EffectSelector<T>,
@@ -11,89 +12,69 @@ const useRevealEffect = <T extends EffectType>(
   const { pageX, pageY } = useContext(MousePosition);
 
   if((typeof pageX !== "number" && pageX !== null) || (typeof pageY !== "number" && pageY !== null)){
-    throw new Error("useRevealEffect hook is only ever to be used as the child of <RevealEffectConfig> element.");
+    console.warn('useRevealEffect hook is only ever to be used as the child of <RevealEffectConfig> element.')
   }
 
   const globalConfig = useContext(EffectConfig);
-
   const assignConfig = useMemo(() => Object.assign({}, globalConfig, config), [globalConfig, config]);
 
-  const initBorderObject = useRef<InitObjectType<T> | undefined>();
-  const initElementObject = useRef<InitObjectType<T> | undefined>();
-
-  const borderInfo = useRef<ApplyEffectInfoType | undefined>();
-  const elementInfo = useRef<ApplyEffectInfoType | undefined>();
-  const handleAfterStop = () => {
-    borderInfo.current?.removeEffect();
-    elementInfo.current?.removeEffect();
-  }
+  const borderRevealEffectInstance = useRef<revealEffectConstructor<T>>()
+  const elementRevealEffectInstance = useRef<revealEffectConstructor<T>>()
 
   useEffect(() => {
-    if(pageX === null || pageY === null || assignConfig.stop) {
-      handleAfterStop();
+    let borderSelector = null;
+    let elementSelector = null;
+    if(selector.borderSelector instanceof Array){
+      borderSelector = handleSelectors(selector.borderSelector);
+    } else {
+      borderSelector = handleSelector(selector.borderSelector);
     }
-  }, [pageX, pageY, assignConfig])
+    if(selector.elementSelector instanceof Array){
+      elementSelector = handleSelectors(selector.elementSelector);
+    } else {
+      elementSelector = handleSelector(selector.elementSelector);
+    }
 
-  const draw = (
-    selector: HTMLElement | HTMLElement[],
-    isContainer?: boolean
-  ) => applyEffect<T>(
-    selector,
-    Boolean(isContainer),
-    assignConfig,
-    pageX,
-    pageY,
-    Boolean(isContainer) ? initBorderObject : initElementObject
-  )
+    if(borderSelector){
+      borderRevealEffectInstance.current = new revealEffectConstructor(borderSelector, true, assignConfig)
+    }
+    if(elementSelector){
+      elementRevealEffectInstance.current = new revealEffectConstructor(elementSelector, false, assignConfig)
+    }
+
+    return () => {
+      borderRevealEffectInstance.current?.removeEffect()
+      borderRevealEffectInstance.current = undefined
+      elementRevealEffectInstance.current?.removeEffect()
+      elementRevealEffectInstance.current = undefined
+    }
+  }, [selector?.borderSelector, selector?.elementSelector])
 
   useEffect(() => {
-    if(!assignConfig.stop){
-      let borderSelector = null;
-      let elementSelector = null;
-      if(selector.borderSelector instanceof Array){
-        borderSelector = handleSelectors(selector.borderSelector);
-      } else {
-        borderSelector = handleSelector(selector.borderSelector);
-      }
-      if(selector.elementSelector instanceof Array){
-        elementSelector = handleSelectors(selector.elementSelector);
-      } else {
-        elementSelector = handleSelector(selector.elementSelector);
-      }
-
-      if(borderSelector){
-        borderInfo.current = draw(borderSelector, true)
-      }
-      if(elementSelector){
-        elementInfo.current = draw(elementSelector, false)
-      }
+    if(borderRevealEffectInstance.current) {
+      borderRevealEffectInstance.current.config = assignConfig
     }
-  }, [
-    selector?.borderSelector, selector?.elementSelector,
-    pageX, pageY,
-    initBorderObject,
-    initElementObject,
-    assignConfig
-  ])
+    if(elementRevealEffectInstance.current) {
+      elementRevealEffectInstance.current.config = assignConfig
+    }
+  }, [assignConfig])
+
+  useEffect(() => {
+    if(revealEffectConstructor.globalRoot) {
+      return;
+    }
+    if(borderRevealEffectInstance.current && !borderRevealEffectInstance.current.config.root) {
+      borderRevealEffectInstance.current.draw(pageX, pageY);
+    }
+    if(elementRevealEffectInstance.current && !elementRevealEffectInstance.current.config.root) {
+      elementRevealEffectInstance.current.draw(pageX, pageY);
+    }
+  }, [pageX, pageY])
 
   return {
-    borderInfo: borderInfo.current,
-    elementInfo: elementInfo.current
-  };
-}
-
-const handleSelector = (selector: EffectElementRef | HTMLElement | undefined | null) => {
-  if(!selector) return;
-  if((selector as EffectElementRef).current){
-    return (selector as EffectElementRef).current;
+    borderRevealEffectInstance: borderRevealEffectInstance.current,
+    elementRevealEffectInstance: elementRevealEffectInstance.current
   }
-  return selector as HTMLElement;
-}
-
-const handleSelectors = (selector: EffectElementRefs | HTMLElement[]) => {
-  return selector.map(item => {
-    return handleSelector(item);
-  }).filter(item => Boolean(item)) as HTMLElement[]|[];
 }
 
 export default useRevealEffect;
