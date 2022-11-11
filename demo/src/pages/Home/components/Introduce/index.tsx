@@ -19,7 +19,7 @@ const introduceCardList = [{
 }, {
   icon: <WebTwoTone color="primary"/>,
   title: "Customized",
-  content: "Provide hook api or component, combine freely"
+  content: "Provide React Hook api & React Component & vanillaJS, combine freely"
 }, ];
 
 const Introduce = () => {

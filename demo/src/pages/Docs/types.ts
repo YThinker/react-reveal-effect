@@ -7,5 +7,5 @@ export interface FieldListItem {
   description: string,
   default: string,
   version?: string,
-  tips?: string
+  tips?: ReactNode
 }

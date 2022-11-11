@@ -15,6 +15,7 @@ import TypesDocs from './pages/Docs/TypesDocs';
 import RevealEffectDocs from './pages/Docs/RevealEffectDocs';
 import UseRevealEffectDocs from './pages/Docs/UseRevealEffectDocs';
 import GetStarted from './pages/Docs/GetStarted';
+import RevealEffectConstructorDocs from './pages/Docs/RevealEffectConstructorDocs';
 
 const App = () => {
   const location = useLocation();
@@ -84,6 +85,9 @@ const routes: RouteItem[] = [{
   }, {
     path: "/docs/useRevealEffect",
     element: <UseRevealEffectDocs />
+  }, {
+    path: "/docs/reveal-effect-constructor",
+    element: <RevealEffectConstructorDocs />
   }, {
     path: "/docs/getstarted",
     element: <GetStarted />

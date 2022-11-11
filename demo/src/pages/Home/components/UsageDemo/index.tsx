@@ -4,7 +4,7 @@ import SectionTitle from "../../../../componnets/SectionTitle";
 import { CustomTab, CustomTabs } from "./CustomTabs";
 import HighlightCode from "./HighlightCode";
 
-export type TabLabel = "Hook"|"Component"
+export type TabLabel = "Hook"|"Component"|"Class"
 interface TabListItem {
   label: TabLabel;
 }
@@ -12,6 +12,8 @@ const TabList: Array<TabListItem> = [{
   label: "Hook",
 }, {
   label: "Component",
+}, {
+  label: "Class"
 }];
 
 const UsageDemo = () => {

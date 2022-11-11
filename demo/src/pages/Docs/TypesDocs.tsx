@@ -1,6 +1,7 @@
-import { Typography } from '@mui/material'
+import { Typography, Link as MaterialLink } from '@mui/material'
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 import DataGrid from '../../componnets/DataGrid'
 import { TypePageHeaderStyles } from './constants'
 import { FieldListItem } from './types';
@@ -91,7 +92,20 @@ const typeDatas: FieldListItem[] = [{
   description: "use which css property to draw the light effect",
   default: '"background-image"',
   version: "3.1.0",
-  tips: "supported in IE11 or later"
+  tips: "'border-image' is supported in IE11 or later"
+}];
+
+const effectConfigTypeDatas: FieldListItem[] = [{
+  fieldName: "root",
+  type: '? HTMLElement | Window | null',
+  description: "",
+  default: 'null',
+  version: "3.2.0",
+  tips: <>
+    try to use RevealEffectConstructor.globalRoot instead of this config property, and only use it when you need to customize root, as it has poor performance
+    <br />
+    when globalRoot and config root are not used, you can draw effect manually using instance.draw(x, y)
+  </>
 }];
 
 const selectorDatas: FieldListItem[] = [{
@@ -129,6 +143,13 @@ const TypesDocs = () => {
       <DataGrid<FieldListItem> keyField="index"
         columns={columnList}
         data={typeDatas}
+      />
+      <Typography variant="h4" component="h4" id="EffectConfigType" sx={TypePageHeaderStyles}>
+        # EffectConfigType <Typography variant='body1'>(extends <MaterialLink component={Link} to='#GlobalEffectConfigType'>Partial{'<'}GlobalEffectConfigType{'>'}</MaterialLink>)</Typography>
+      </Typography>
+      <DataGrid<FieldListItem> keyField="index"
+        columns={columnList}
+        data={effectConfigTypeDatas}
       />
       <Typography variant="h4" component="h4" id="Selector" sx={TypePageHeaderStyles}>
         # Selector

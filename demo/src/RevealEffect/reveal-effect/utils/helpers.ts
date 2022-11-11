@@ -138,7 +138,6 @@ export function isIntersected(
 			r2.bottom < r1.top
 		)
 	}
-	
 
 	const result = intersectRect(cursor_area, el_area)
 

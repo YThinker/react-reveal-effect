@@ -6,7 +6,13 @@ import { FieldListItem } from './types';
 
 const columnList: GridColumn<FieldListItem>[] = [{
   field: "fieldName",
-  title: "Field Name"
+  title: "Field Name",
+  render(value) {
+    if(['mountOnBody', 'component'].includes(value as string)) {
+      return <Typography component='del'>{value}</Typography>
+    }
+    return value;
+  }
 }, {
   field: "type",
   title: "Type",
@@ -25,11 +31,11 @@ const columnList: GridColumn<FieldListItem>[] = [{
 },{
   field: "version",
   title: "Version"
+},{
+  field: "tips",
+  title: "tips"
 }];
 
-// mountOnBody?: B;
-//   component?: B extends true ? never : ElementType;
-//   off?: boolean;
 const hookDatas: FieldListItem[] = [{
   fieldName: "config",
   type: <MaterialLink component={Link} to="/docs/types#GlobalEffectConfigType">GlobalEffectConfigType</MaterialLink>,
@@ -42,27 +48,35 @@ const hookDatas: FieldListItem[] = [{
   description: "mousemove event listener mount on document body or not",
   default: "true",
   version: "2.0.0",
+  tips: 'deprecated'
 }, {
   fieldName: "component",
   type: "? ElementType",
   description: "The component used for the root node. Either a string to use a HTML element or a component. It only works when mountOnBody is true",
   default: "",
   version: "2.0.0",
+  tips: 'deprecated'
 }, {
   fieldName: "off",
   type: "? boolean",
-  description: "border effect element's reflect",
+  description: "unmount globalRoot's event listener",
   default: "",
   version: "3.0.0",
+}, {
+  fieldName: "globalRoot",
+  type: "? HTMLElement | Window | null",
+  description: "",
+  default: "window",
+  version: "3.2.0",
 }];
 
 const RevealEffectConfigDocs = () => {
   return (
     <>
       <Typography variant="h3" component="h3" sx={TypePageHeaderStyles}>
-        RevealEffect
+        RevealEffectConfig
       </Typography>
-      <Typography variant="h4" component="h4" id="useRevealEffectParameter" sx={TypePageHeaderStyles}>
+      <Typography variant="h4" component="h4" id="Parameters" sx={TypePageHeaderStyles}>
         # Parameters
       </Typography>
       <DataGrid<FieldListItem> keyField="index"

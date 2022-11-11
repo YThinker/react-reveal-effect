@@ -82,3 +82,31 @@ const Logo = () => {
 
 export default Logo;
 `;
+
+export const classCode = `
+  <div id='container'>
+    <span id='children'></span>
+  </div>
+
+  <script type='module'>
+    import { RevealEffectConstructor } from 'react-reveal-effect'
+
+    const instance = new RevealEffectConstructor({
+      borderSelector: document.getElementById('container'),
+      elementSelector: document.getElementById('children')
+    }, {
+      elementColor: 'rgba(255, 255, 255, 0.6)'
+      borderColor: 'rgba(255, 255, 255, 0.4)',
+      root: document.body
+    })
+
+    // change config
+    instance.config = { clickEffect: true, clickColor: 'rgba(200, 200, 200)' }
+    // stop draw effect
+    instance.stop();
+    // restart draw effect
+    instance.start();
+    // remove event listener
+    instance.removeEffect();
+  </script>
+`;

@@ -1,6 +1,6 @@
-import { GlobalEffectConfigType } from "../types";
+import { EffectType, GlobalEffectConfigType } from "../types";
 
-export const globalConfig: GlobalEffectConfigType<"background-image" | "border-image"> = {
+export const globalConfig: GlobalEffectConfigType<EffectType> = {
   elementEffect: true,
   borderEffect: true,
   clickEffect: false,

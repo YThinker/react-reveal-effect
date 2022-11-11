@@ -1,10 +1,10 @@
 import { Box, styled } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import Highlight, { defaultProps, Language } from "prism-react-renderer";
 import dracula from 'prism-react-renderer/themes/dracula';
 import { useMemo } from "react";
 import { TabLabel } from ".";
-import { hookCode, componentCode } from "./constance";
+import { hookCode, componentCode, classCode } from "./constance";
 
 
 const StyledMotionDiv = styled(motion.div)`
@@ -14,7 +14,7 @@ const StyledMotionDiv = styled(motion.div)`
   padding: 1em 0 1em 1em;
   overflow: auto;
   border-radius: 16px;
-  background-color: rgb(0, 30, 60);
+  background-color: #000;
 `;
 
 interface HighlightCodeProps {
@@ -27,14 +27,21 @@ const HighlightCode = (props: HighlightCodeProps) => {
       case "Hook":
         return {
           code: hookCode,
-          initial: { x: "100%", opacity: 0 },
+          initial: { x: "-100%", opacity: 0 },
           exit: { x: "100%", opacity: 0 }
         };
       case "Component":
         return {
           code: componentCode,
           initial: { x: "-100%", opacity: 0 },
-          exit: { x: "-100%", opacity: 0 }
+          exit: { x: "100%", opacity: 0 }
+        };
+      case "Class":
+        return {
+          code: classCode,
+          initial: { x: "-100%", opacity: 0 },
+          exit: { x: "100%", opacity: 0 },
+          language: 'html'
         };
     }
   }, [type]);
@@ -59,7 +66,7 @@ const HighlightCode = (props: HighlightCodeProps) => {
           initial={options.initial} animate={{ x: 0, opacity: 1 }} exit={options.exit} transition={{ duration: 0.3 }}
         >
           <Box sx={{ width: "100%", height: "100%",overflow: "auto" }}>
-            <Highlight {...defaultProps} code={options.code} language="tsx" theme={dracula}>
+            <Highlight {...defaultProps} code={options.code} language={options.language as Language ?? "tsx"} theme={dracula}>
               {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <pre className={className} style={{...style, backgroundColor: "transparent"}}>
                   {tokens.map((line, i) => (

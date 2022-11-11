@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ChangeEvent, PropsWithChildren, useRef, useState } from "react";
 import { ColorResult } from "react-color";
 import ColorPicker from "../../../../componnets/ColorPicker";
-// import { RevealEffect, RevealEffectStylesType } from "react-reveal-effect";
 import { RevealEffect, RevealEffectStylesType } from "../../../../RevealEffect";
 
 const listItemEffectConfig: RevealEffectStylesType<"background-image", "safe"> = {
@@ -139,6 +138,7 @@ const AdjustableDemo = () => {
             component={motion.div} initial={{ opacity: 0, y: "100%" }} whileInView={{ opacity: 1, y: 0 }} viewport={{ margin: "-100px" }}
           >
             <Box component="button"
+              onClick={() => setConfig(pre => ({ ...pre, clickEffect: !pre.clickEffect }))}
               sx={{
                 width: "100px",
                 height: "100px",

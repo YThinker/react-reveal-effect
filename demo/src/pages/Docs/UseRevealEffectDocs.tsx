@@ -32,7 +32,7 @@ const columnList: GridColumn<FieldListItem>[] = [{
 
 const hookDatas: FieldListItem[] = [{
   fieldName: "selector",
-  type: "HookSelector",
+  type: "Selector",
   typeUrl: "/docs/types#Selector",
   description: "add effects on these elements",
   default: "",
@@ -40,11 +40,20 @@ const hookDatas: FieldListItem[] = [{
   tips: `when effectType is "border-image", this paramter only has elementSelector property`
 }, {
   fieldName: "config",
-  type: "Partial<GlobalEffectConfigType>",
-  typeUrl: "/docs/types#GlobalEffectConfigType",
+  type: "EffectConfigType",
+  typeUrl: "/docs/types#EffectConfigType",
   description: "effect's config, which has a higher priority than global config",
   default: "",
   version: "",
+}];
+
+const returnDatas: FieldListItem[] = [{
+  fieldName: "revealEffectInstance",
+  type: "RevealEffectConstructor",
+  typeUrl: "/docs/reveal-effect-constructor#Returns",
+  description: "RevealEffectConstructor's instance",
+  default: "",
+  version: "3.2.0",
 }];
 
 const UseRevealEffectDocs = () => {
@@ -59,6 +68,13 @@ const UseRevealEffectDocs = () => {
       <DataGrid<FieldListItem> keyField="index"
         columns={columnList}
         data={hookDatas}
+      />
+      <Typography variant="h4" component="h4" id="Returns" sx={TypePageHeaderStyles}>
+        # Returns
+      </Typography>
+      <DataGrid<FieldListItem> keyField="index"
+        columns={columnList}
+        data={returnDatas}
       />
     </>
   )

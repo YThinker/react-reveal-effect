@@ -37,10 +37,10 @@ const hookDatas: FieldListItem[] = [{
     &nbsp;&nbsp;&nbsp;&nbsp;borderWidth: string|number,<br />
     &nbsp;&nbsp;&nbsp;&nbsp;effectBoxSizing: "content-box" | "border-box" | "safe"<br />
     {`} & `}
-    <MaterialLink component={Link} to="/docs/types#GlobalEffectConfigType">{`Partial<GlobalEffectConfigType>`}</MaterialLink>
+    <MaterialLink component={Link} to="/docs/types#EffectConfigType">{`EffectConfigType`}</MaterialLink>
   </>,
   description: "effects' style config",
-  default: "{ borderWidth: 1px, effectBoxSizing: 'content-box' }",
+  default: "{ borderWidth: '1px', effectBoxSizing: 'content-box' }",
   version: "",
   tips: `RevealEffect component doesn't support "border-image" effectType`
 }, {
@@ -65,7 +65,7 @@ const hookDatas: FieldListItem[] = [{
   fieldName: "component",
   type: "ElementType",
   description: "The component used for the root node. Either a string to use a HTML element or a component",
-  default: "",
+  default: "div",
   version: "2.0.0",
 }];
 
@@ -75,7 +75,7 @@ const RevealEffectDocs = () => {
       <Typography variant="h3" component="h3" sx={TypePageHeaderStyles}>
         RevealEffect
       </Typography>
-      <Typography variant="h4" component="h4" id="useRevealEffectParameter" sx={TypePageHeaderStyles}>
+      <Typography variant="h4" component="h4" id="Parameters" sx={TypePageHeaderStyles}>
         # Parameters
       </Typography>
       <DataGrid<FieldListItem> keyField="index"

@@ -90,18 +90,17 @@ export interface ClassEffectConfigType<T extends EffectType> extends GlobalEffec
 type CustomPartial<T> = {
   [K in keyof T]?: T[K] | undefined;
 }
-export interface EffectConfigType<T extends EffectType> extends CustomPartial<GlobalEffectConfigType<T>> { }
+export interface EffectConfigType<T extends EffectType> extends CustomPartial<ClassEffectConfigType<T>> {}
 
 
-export interface ConfigComponentProps<T extends EffectType, B extends boolean> {
-  mountOnBody?: B;
-  config?: EffectConfigType<T>;
-  component?: B extends true ? never : ElementType;
+export interface ConfigComponentProps<T extends EffectType = 'background-image'> {
+  /** @deprecated */
+  mountOnBody?: never;
+  /** @deprecated */
+  component?: never;
+  globalRoot?: HTMLElement | typeof window | null;
+  config?: CustomPartial<GlobalEffectConfigType<T>>;
   off?: boolean;
-}
-export interface ConfigComponentTypeMap<T extends EffectType = "background-image", B extends boolean = true, D extends ElementType = 'div', P = {}> {
-  props: P & PropsWithChildren<ConfigComponentProps<T, B>>;
-  defaultComponent: D;
 }
 
 export type EffectElement = (() => Element) | Element | null | undefined;

@@ -1,10 +1,8 @@
-import { Build, Code, ExpandLess, ExpandMore, BuildCircle, Phishing, Tune } from "@mui/icons-material";
-import { Collapse, Container, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, styled } from "@mui/material";
-import { AnimatePresence } from "framer-motion";
-import { ReactNode, useContext, useEffect, useState } from "react";
-import { Routes, Route, useLocation, Outlet } from "react-router";
+import { Code, ExpandLess, ExpandMore, BuildCircle } from "@mui/icons-material";
+import { Collapse, Container, Grid, List, ListItemButton, ListItemIcon, ListItemText, styled } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useLocation, Outlet } from "react-router";
 import { Link } from "react-router-dom";
-import AnimationPage from "../../componnets/AnimationPage";
 import Drawer from "../../componnets/Drawer";
 
 import TypescriptListIcon from "../../img/typescript_listitem.png";
@@ -30,7 +28,7 @@ const Docs = () => {
     if(["/docs/reveal-effect-config", "/docs/useRevealEffect", "/docs/reveal-effect"].includes(location.pathname)){
       setComponentsCollapseOpen(true);
     }
-  }, [])
+  }, [location.pathname, setComponentsCollapseOpen])
 
   return (
     <Grid container sx={{
@@ -69,6 +67,9 @@ const Docs = () => {
               </ListItemButton>
               <ListItemButton selected={location.pathname === "/docs/reveal-effect"} component={Link} to="/docs/reveal-effect">
                 <StyledChildListItemText>RevealEffect</StyledChildListItemText>
+              </ListItemButton>
+              <ListItemButton selected={location.pathname === "/docs/reveal-effect-constructor"} component={Link} to="/docs/reveal-effect-constructor">
+                <StyledChildListItemText>RevealEffectConstructor</StyledChildListItemText>
               </ListItemButton>
             </List>
           </Collapse>

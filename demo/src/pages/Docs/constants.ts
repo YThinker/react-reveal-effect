@@ -9,7 +9,7 @@ export const StartedPageHighlightStyles = {
   color: "#fff",
   backgroundColor: "#000",
   padding: "6px 16px",
-  borderRadius: '4px'
+  border: '1px solid transparent'
 }
 
 export const installCode = '$ npm install react-reveal-effect'
@@ -75,24 +75,29 @@ export const componentCode = `
 `;
 
 export const vanillaCode = `
-  import { revealEffectConstructor } from 'react-reveal-effect';
+  <div id='container'>
+    <span id='children'></span>
+  </div>
 
-  const revealEffectInstance = new revealEffectConstrucotr(document.querySelectorAll('.reveal'), true, {
-    clickEffect: false,
-    borderColor: "rgba(255, 255, 255, 0.6)",
-    elementColor: "rgba(255, 255, 255, 0.3)",
-    effectType: "background-image"
-    root: document.body // optional
-  })
+  <script type='module'>
+    import { RevealEffectConstructor } from 'react-reveal-effect'
 
-  /** stop */
-  revealEffectInstance.stop();
-  /** start */
-  revealEffectInstance.start();
-  /** or */
-  revealEffectInstance.config = { stop: true }
-  revealEffectInstance.config = { stop: false }
+    const instance = new RevealEffectConstructor({
+      borderSelector: document.getElementById('container'),
+      elementSelector: document.getElementById('children')
+    }, {
+      elementColor: 'rgba(255, 255, 255, 0.6)'
+      borderColor: 'rgba(255, 255, 255, 0.4)',
+      root: document.body
+    })
 
-  /** manual operating draw(when root is undefined) */
-  reavealEffectInstance.draw(pageX, pageY)
+    // change config
+    instance.config = { clickEffect: true, clickColor: 'rgba(200, 200, 200)' }
+    // stop draw effect
+    instance.stop();
+    // restart draw effect
+    instance.start();
+    // remove event listener
+    instance.off();
+  </script>
 `

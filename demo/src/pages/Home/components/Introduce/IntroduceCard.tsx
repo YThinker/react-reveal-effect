@@ -36,6 +36,7 @@ const IntroduceCard = (props: IntroduceCardProps) => {
         effectBoxSizing: "safe",
         clickEffect: false,
         elementEffect: true,
+        elementGradientSize: 300
       }}
       borderStyle={{ borderRadius: "16px" }}
       component={MuiMotionDiv}
