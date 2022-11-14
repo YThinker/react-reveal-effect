@@ -30,19 +30,20 @@
 ## Usage
 🔨you can choose to use hooks or component\
 🚩Whether you choose to use hooks or component, you must use the global configuration context on their parent node\
+🆕Draw directly with RevealEffectConstructor, with no other restrictions
 \
 Parent.ts
 ```tsx
-import { Container } from "@mui/material";
 import { RevealEffectConfig } from 'react-reveal-effect';
 
 const Parent = ({ children }) => {
   return (
     <RevealEffectConfig
-      mountOnBody={false}
-      component={Container}
+      globalRoot={document.querySelector('#root')}
       config={{
-        borderColose: "#fff"
+        borderColor: "#fff",
+        clickEffect: false,
+        elementGradientSize: 300
       }}
     >
       {children}
@@ -65,7 +66,8 @@ const Child = () => {
       elementSelector: buttonRef
     },
     {
-      clickEffect: false
+      borderGradientSize: 100,
+      elementColor: '#f2f2f2'
     }
   );
 
@@ -93,22 +95,51 @@ const Child = () => {
 }
 ```
 
+### Class
+```html
+<div id='container'>
+  <span id='children'></span>
+</div>
+
+<script type='module'>
+  import { RevealEffectConstructor } from 'react-reveal-effect'
+
+  const instance = new RevealEffectConstructor({
+    borderSelector: document.getElementById('container'),
+    elementSelector: document.getElementById('children')
+  }, {
+    elementColor: 'rgba(255, 255, 255, 0.6)'
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    root: document.body
+  })
+
+  // change config
+  instance.config = { clickEffect: true, clickColor: 'rgba(200, 200, 200)' }
+  // stop draw effect
+  instance.stop();
+  // restart draw effect
+  instance.start();
+  // remove event listener
+  instance.removeEffect();
+</script>
+```
+
 ## Config
 ⚙
 ### Global Config(Type: EffectConfigType)
-| Config Property     | Description         | Type                         | Default                   |
-| ------------------- | ------------------- | ---------------------------- | ------------------------- |
-| borderColor         | border effect color | borderColor?: string         | rgba(255, 255, 255, 0.25) |
-| elementColor        | hover effect color  | elementColor?: string        | rgba(255, 255, 255, 0.25) |
-| clickColor          | click effect color  | clickColor?: string          | rgba(255, 255, 255, 0.25) |
-| clickEffect         | take click effect   | clickEffect?: string         | false                     |
-| borderGradientSize  | border effect size  | borderGradientSize?: number  | 150                       |
-| elementGradientSize | hover effect size   | elementGradientSize?: number | 150                       |
-| clickGradientSize   | click effect size   | clickGradientSize?: number   | 80                        |
-| borderEffect        | take border effect  | borderEffect?: boolean       | true                      |
-| elementEffect       | take hover effect   | elementEffect?: boolean      | true                      |
-| stop                | stop drawer effect  | stop?: boolean               | false                     |
-| effectType                | use which css property to draw the light effect  | stop?: "border-image"\|"background-image"               | "background-image"                    |
+| Config Property     | Description                                     | Type                                      | Default                   |
+| ------------------- | ----------------------------------------------- | ----------------------------------------- | ------------------------- |
+| borderColor         | border effect color                             | borderColor?: string                      | rgba(255, 255, 255, 0.25) |
+| elementColor        | hover effect color                              | elementColor?: string                     | rgba(255, 255, 255, 0.25) |
+| clickColor          | click effect color                              | clickColor?: string                       | rgba(255, 255, 255, 0.25) |
+| clickEffect         | take click effect                               | clickEffect?: string                      | false                     |
+| borderGradientSize  | border effect size                              | borderGradientSize?: number               | 150                       |
+| elementGradientSize | hover effect size                               | elementGradientSize?: number              | 150                       |
+| clickGradientSize   | click effect size                               | clickGradientSize?: number                | 80                        |
+| borderEffect        | take border effect                              | borderEffect?: boolean                    | true                      |
+| elementEffect       | take hover effect                               | elementEffect?: boolean                   | true                      |
+| stop                | stop drawer effect                              | stop?: boolean                            | false                     |
+| effectType          | use which css property to draw the light effect | stop?: "border-image"\|"background-image" | "background-image"        |
 
 ### Hooks
 Parameter
@@ -161,6 +192,13 @@ https://stackoverflow.com/questions/5706963/possible-to-use-border-radius-togeth
 &nbsp;
 
 ## Changelog
+### v3.2.0
+Break:
+- The underlying implementation was changed from a function named applyEffect to a class named RevealEffectConstructor
+- Remove the RevealEffectConfig properties mountOnBody and component
+- Add the RevealEffectConfig properties globalRoot
+
+It is now easier to customize using the underlying implementation class RevealEffectConstructor
 ### v3.1.0
 Optimize: narrow type inference\
 New: support to use CSS "border-image" property to draw the effect

@@ -48,14 +48,14 @@ const hookDatas: FieldListItem[] = [{
   description: "mousemove event listener mount on document body or not",
   default: "true",
   version: "2.0.0",
-  tips: 'deprecated'
+  tips: 'v3.2.0 deprecated'
 }, {
   fieldName: "component",
   type: "? ElementType",
   description: "The component used for the root node. Either a string to use a HTML element or a component. It only works when mountOnBody is true",
   default: "",
   version: "2.0.0",
-  tips: 'deprecated'
+  tips: 'v3.2.0 deprecated'
 }, {
   fieldName: "off",
   type: "? boolean",

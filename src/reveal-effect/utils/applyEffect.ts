@@ -3,6 +3,9 @@ import { clearAllBackgroundEffect, clearAllBorderEffect, clearEffect, drawEffect
 
 import { ApplyEffectInfoType, EffectType, GlobalEffectConfigType, InitObjectType, PreProcessElement } from "../types";
 
+/**
+ * @deprecated use RevealEffectConstructor
+ */
 export default function applyEffect<T extends EffectType>(
   selector: HTMLElement | Array<HTMLElement>,
   isContainer: boolean,

@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { EffectType, GlobalEffectConfigType, InitObjectType, PreProcessElement, PreProcessElements } from "../types";
+import { EffectElementRef, EffectElementRefs, EffectType, GlobalEffectConfigType, InitObjectType, PreProcessElement, PreProcessElements } from "../types";
 
 export function init<T extends EffectType>(
 	initObject: MutableRefObject<InitObjectType<T> | undefined>,
@@ -138,7 +138,6 @@ export function isIntersected(
 			r2.bottom < r1.top
 		)
 	}
-	
 
 	const result = intersectRect(cursor_area, el_area)
 
@@ -146,15 +145,28 @@ export function isIntersected(
 }
 
 export function handleRemove(item: PreProcessElement, initKey?: keyof typeof item.removeMouseListener) {
-	if(initKey && item.removeMouseListener[initKey]){
-		(item.removeMouseListener[initKey]!)();
+	if(initKey){
+		item.removeMouseListener[initKey]?.();
 		item.removeMouseListener[initKey] = null;
+		return;
 	}
 	let key: keyof typeof item.removeMouseListener
 	for(key in item.removeMouseListener){
-		if(item.removeMouseListener[key]){
-			(item.removeMouseListener[key]!)();
-			item.removeMouseListener[key] = null;
-		}
+		item.removeMouseListener[key]?.();
+		item.removeMouseListener[key] = null;
 	}
+}
+
+export const handleSelector = (selector: EffectElementRef | HTMLElement | undefined | null) => {
+  if(!selector) return;
+  if((selector as EffectElementRef).current){
+    return (selector as EffectElementRef).current;
+  }
+  return selector as HTMLElement;
+}
+
+export const handleSelectors = (selector: EffectElementRefs | HTMLElement[]) => {
+  return selector.map(item => {
+    return handleSelector(item);
+  }).filter(item => Boolean(item)) as HTMLElement[]|[];
 }

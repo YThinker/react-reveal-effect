@@ -67,20 +67,8 @@ const RevealEffect = forwardRef((props, ref) => {
     elementSelector: insiderElementRef
   }, restConfig);
 
-  if(effectBoxSizing === "content-box"){
-    return (
-      <Tag ref={forkContainerRef}
-        style={{display: "inline-block", padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
-        className={className}
-        {...restProps}
-      >
-        {cloneElement(
-          child,
-          {ref: insiderElementRef},
-        )}
-      </Tag>
-    );
-  } else if(effectBoxSizing === "border-box"){
+  /** default effectBoxSizing is content-box */
+  if(effectBoxSizing === "border-box"){
     return (
       <Tag ref={forkContainerRef}
         style={{ ...shrinkStyles.border, ...style}}
@@ -121,7 +109,18 @@ const RevealEffect = forwardRef((props, ref) => {
       </Tag>
     );
   } else {
-    return child;
+    return (
+      <Tag ref={forkContainerRef}
+        style={{display: "inline-block", padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
+        className={className}
+        {...restProps}
+      >
+        {cloneElement(
+          child,
+          {ref: insiderElementRef},
+        )}
+      </Tag>
+    );
   }
 }) as OverridableComponent<RevealEffectComponentTypeMap<BoxSizingType>>
 
