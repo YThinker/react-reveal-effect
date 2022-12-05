@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react-reveal-effect/static/css/main.543e291f.css",
-    "main.js": "/react-reveal-effect/static/js/main.29333920.js",
+    "main.js": "/react-reveal-effect/static/js/main.d9f1ab12.js",
     "static/js/787.0fb8cbe0.chunk.js": "/react-reveal-effect/static/js/787.0fb8cbe0.chunk.js",
     "static/media/roboto-all-500-normal.woff": "/react-reveal-effect/static/media/roboto-all-500-normal.52cb737b682eb9661ee1.woff",
     "static/media/roboto-all-700-normal.woff": "/react-reveal-effect/static/media/roboto-all-700-normal.ef6d1d09b20b877fee4e.woff",
@@ -30,11 +30,11 @@
     "static/media/roboto-greek-ext-700-normal.woff2": "/react-reveal-effect/static/media/roboto-greek-ext-700-normal.9674bc0ae12c2551d9d1.woff2",
     "index.html": "/react-reveal-effect/index.html",
     "main.543e291f.css.map": "/react-reveal-effect/static/css/main.543e291f.css.map",
-    "main.29333920.js.map": "/react-reveal-effect/static/js/main.29333920.js.map",
+    "main.d9f1ab12.js.map": "/react-reveal-effect/static/js/main.d9f1ab12.js.map",
     "787.0fb8cbe0.chunk.js.map": "/react-reveal-effect/static/js/787.0fb8cbe0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.543e291f.css",
-    "static/js/main.29333920.js"
+    "static/js/main.d9f1ab12.js"
   ]
 }

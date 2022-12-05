@@ -24,7 +24,7 @@
     "url": "https://github.com/YThinker/react-reveal-effect/issues"
   },
   "types": "dist/types/index.d.ts",
-  "homepage": "https://ythinker.github.io",
+  "homepage": "https://ythinker.github.io/react-reveal-effect",
   "devDependencies": {
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",

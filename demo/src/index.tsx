@@ -8,7 +8,7 @@ import '@fontsource/roboto/700.css';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -30,7 +30,7 @@ const theme = createTheme({
 
 render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename='react-reveal-effect'>
       <ThemeProvider theme={theme}>
         <StyledEngineProvider injectFirst>
           <App />

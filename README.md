@@ -15,7 +15,7 @@
 &nbsp;
 
 ## Demo & Docs
-🔗 https://ythinker.github.io
+🔗 https://ythinker.github.io/react-reveal-effect
 
 &nbsp;
 
