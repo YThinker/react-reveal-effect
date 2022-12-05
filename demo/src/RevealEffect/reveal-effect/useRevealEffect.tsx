@@ -36,6 +36,7 @@ const useRevealEffect = <T extends EffectType>(
       revealEffectInstance.current?.off()
       revealEffectInstance.current = undefined
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selector?.borderSelector, selector?.elementSelector])
 
   useEffect(() => {

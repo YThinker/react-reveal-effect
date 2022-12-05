@@ -26,7 +26,9 @@ const RevealEffectConfig = (props: PropsWithChildren<ConfigComponentProps>) => {
     }
   }, [off])
 
-  useEffect(() => () => RevealEffectConstructor.unmount(), [])
+  useEffect(() => {
+    return () => RevealEffectConstructor.globalRoot = undefined;
+  }, [])
 
   const config = useMemo(() => {
     if(userConfig){
