@@ -2,15 +2,18 @@
   "name": "react-reveal-effect",
   "version": "3.2.1",
   "description": " Reveal Effect of Fluent Design for React",
-  "main": "dist/index.js",
+  "main": "package/lib/index.js",
+  "module": "package/es/index.js",
+  "umd": "package/dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf package && rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YThinker/react-reveal-effect.git"
   },
+  "sideEffect": false,
   "keywords": [
     "react",
     "fluent design",
@@ -18,21 +21,45 @@
     "reveal",
     "brush"
   ],
-  "author": "xingkaiyang",
+  "author": "yangxingkai",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/YThinker/react-reveal-effect/issues"
   },
-  "types": "dist/types/index.d.ts",
+  "types": "package/types/index.d.ts",
   "homepage": "https://ythinker.github.io/react-reveal-effect",
+  "browserslist": [
+    "defaults",
+    "not ie < 8",
+    "last 2 versions",
+    "> 1%",
+    "iOS 7",
+    "last 3 iOS versions"
+  ],
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
+    "@rollup/plugin-strip": "^3.0.1",
+    "@rollup/plugin-terser": "^0.2.0",
+    "@rollup/plugin-typescript": "^10.0.1",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "rollup": "^3.6.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-node-externals": "^5.0.2",
     "typescript": "^4.5.4"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tslib": "^2.4.1"
+  }
 }

@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
 import { useRef } from 'react'
 import { useRevealEffect } from '../../../../RevealEffect';
+// import { useRevealEffect } from 'react-reveal-effect';
 
 const HrComponent = styled("hr")({
   backgroundColor: "rgba(100, 100, 100, 0.4)",
