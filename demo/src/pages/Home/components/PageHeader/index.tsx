@@ -52,8 +52,9 @@ const PageHeader = () => {
   const [timer, setTimer] = useState<number>(0);
   useEffect(() => {
     if(copySuccess){
-      const timer = window.setTimeout(() => setCopySuccess(false), 2000);
-      setTimer(timer);
+      window.clearTimeout(timer)
+      const timerFlag = window.setTimeout(() => setCopySuccess(false), 2000);
+      setTimer(timerFlag);
     }
   }, [copySuccess, setCopySuccess]);
   useEffect(() => clearTimeout(timer), []);

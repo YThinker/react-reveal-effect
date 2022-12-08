@@ -4,7 +4,7 @@ import useRevealEffect from "./reveal-effect/useRevealEffect";
 import RevealEffectConstructor from "./reveal-effect/RevealEffectConstructor";
 
 export {
-  RevealEffect, RevealEffectConfig, useRevealEffect, RevealEffectConstructor
+  RevealEffect, RevealEffectConfig, useRevealEffect, RevealEffectConstructor,
 }
 
-export * from "./reveal-effect/types";
+export * from './reveal-effect/types';
