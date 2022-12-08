@@ -1,6 +1,6 @@
 {
   "name": "react-reveal-effect",
-  "version": "3.2.2-beta.1",
+  "version": "3.2.2",
   "description": " Reveal Effect of Fluent Design for React",
   "main": "package/lib/index.js",
   "module": "package/es/index.js",
