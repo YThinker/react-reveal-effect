@@ -5,10 +5,16 @@
   "main": "package/lib/index.js",
   "module": "package/es/index.js",
   "umd": "package/dist/index.js",
+  "types": "package/lib/index.d.ts",
   "scripts": {
     "build": "rm -rf package && rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "package",
+    "package.json",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YThinker/react-reveal-effect.git"
@@ -26,7 +32,6 @@
   "bugs": {
     "url": "https://github.com/YThinker/react-reveal-effect/issues"
   },
-  "types": "package/types/index.d.ts",
   "homepage": "https://ythinker.github.io/react-reveal-effect",
   "browserslist": [
     "defaults",

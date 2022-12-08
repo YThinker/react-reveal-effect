@@ -8,17 +8,21 @@ const dts = require('rollup-plugin-dts').default
 
 const entry = 'src/index.tsx';
 
+const cjsOutDir = 'package/lib';
+const esOutDir = 'package/es';
+const umdOutDir = 'package/dist';
+
 module.exports.default = [{
     input: entry,
     output: [{
-        dir: 'package/lib',
+        dir: cjsOutDir,
         format: 'cjs'
     }, {
-        dir: 'package/es',
+        dir: esOutDir,
         format: 'es'
     }, {
         name: 'ReactRevealEffect',
-        dir: 'package/dist',
+        dir: umdOutDir,
         format: 'umd'
     }],
     plugins: [
@@ -36,8 +40,15 @@ module.exports.default = [{
 }, {
     input: entry,
     output: [{
-        dir: 'package',
+        dir: cjsOutDir,
+        format: 'cjs'
+    }, {
+        dir: esOutDir,
         format: 'es'
+    }, {
+        name: 'ReactRevealEffect',
+        dir: umdOutDir,
+        format: 'umd'
     }],
     plugins: [dts()]
 }];
