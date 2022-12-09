@@ -46,7 +46,6 @@ const RevealEffect = forwardRef((props, ref) => {
       styles.current ?? (styles.current = {...window.getComputedStyle(insiderElementRef.current)});
       setShrinkStyles({
         border: {
-          display: "inline-block",
           width: styles.current.width,
           height: styles.current.height,
           boxSizing: "border-box",
@@ -84,7 +83,7 @@ const RevealEffect = forwardRef((props, ref) => {
   } else if(effectBoxSizing === "safe"){
     return (
       <Tag ref={ref}
-        style={{position: "relative", display: "inline-block", borderRadius: styles.current?.borderRadius, ...style}}
+        style={{position: "relative", borderRadius: styles.current?.borderRadius, ...style}}
         className={className}
         {...restProps}
       >
@@ -111,7 +110,7 @@ const RevealEffect = forwardRef((props, ref) => {
   } else {
     return (
       <Tag ref={forkContainerRef}
-        style={{display: "inline-block", padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
+        style={{padding: borderWidth, borderRadius: styles.current?.borderRadius, ...style }}
         className={className}
         {...restProps}
       >

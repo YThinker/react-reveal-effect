@@ -192,6 +192,8 @@ https://stackoverflow.com/questions/5706963/possible-to-use-border-radius-togeth
 &nbsp;
 
 ## Changelog
+### v3.2.3
+Fix: remove side effect style
 ### v3.2.0
 Break:
 - The underlying implementation was changed from a function named applyEffect to a class named RevealEffectConstructor
