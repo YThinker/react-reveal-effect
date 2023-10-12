@@ -169,6 +169,9 @@ export default class RevealEffectConstructor<T extends EffectType = 'background-
     this.removeChildrenBorderEventListener();
     this.clearAllBackgroundEffect();
     this.clearAllBorderEffect();
+    this.children = undefined;
+    this.childrenBorder = undefined;
+    this.config.root = undefined;
   }
 
   /** 初始化 */
